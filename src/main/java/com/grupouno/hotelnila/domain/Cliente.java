@@ -5,6 +5,7 @@
  */
 package com.grupouno.hotelnila.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +24,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -40,7 +42,7 @@ public class Cliente {
 	
 	/** Representa el nombre del cliente. Limitado a un máximo de 30 caracteres */
 	@Size(max=30)
-	private String nombre;
+	private String nombreCli;
 	
 	/** Representa el apellido paterno del cliente. Limitado a un máximo de 15 caracteres */
     @Size(max=15)
@@ -52,6 +54,7 @@ public class Cliente {
 	
 	/** Representa el DNI del cliente. Limitado a 8 dígitos */
 	
+	@Column(unique=true)
 	@Digits(integer = 8, fraction = 0)
 	private String dni;
 	
