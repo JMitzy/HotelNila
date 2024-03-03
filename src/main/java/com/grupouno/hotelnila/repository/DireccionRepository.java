@@ -20,5 +20,5 @@ public interface DireccionRepository extends CrudRepository<Direccion, Long> {
 	 *
 	 * @param nombre de la dirección a buscar
 	 */
-	List<Direccion> findByNombreDireccion(String nombreDireccion);
+	List<Direccion> findBynombreDirec(String nombreDireccion);
 }

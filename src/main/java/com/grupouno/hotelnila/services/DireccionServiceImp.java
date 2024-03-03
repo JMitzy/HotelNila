@@ -64,7 +64,7 @@ public class DireccionServiceImp implements DireccionService {
 	@Override
 	@Transactional
 	public Direccion crearDireccion(Direccion direccion) throws IllegalOperationException {
-		if(!direcRep.findByNombreDireccion(direccion.getNombreDirec()).isEmpty()){
+		if(!direcRep.findBynombreDirec(direccion.getNombreDirec()).isEmpty()){
 	           throw new IllegalOperationException("La dirección ya está registrada.");
 	        }
 	    return direcRep.save(direccion);
@@ -87,7 +87,7 @@ public class DireccionServiceImp implements DireccionService {
         if(direccionEntity.isEmpty()){
             throw new EntityNotFoundException(ErrorMessage.DIRECCION_NOT_FOUND);
         }
-        if(!direcRep.findByNombreDireccion(direccion.getNombreDirec()).isEmpty()){
+        if(!direcRep.findBynombreDirec(direccion.getNombreDirec()).isEmpty()){
 	           throw new IllegalOperationException("La dirección ya está registrada.");
 	        }
         direccion.setIdDireccion(idDireccion);
@@ -107,7 +107,7 @@ public class DireccionServiceImp implements DireccionService {
 		Direccion direccion = direcRep.findById(idDireccion).orElseThrow(
                 ()->new EntityNotFoundException(ErrorMessage.DIRECCION_NOT_FOUND)
         );
-        if(!direccion.getCliente().equals(null)){
+        if(!(direccion.getCliente()== null)){
             throw new IllegalOperationException("La dirección esta asociada a un cliente");
         }
         direcRep.deleteById(idDireccion);
