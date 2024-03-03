@@ -14,6 +14,7 @@ import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -21,6 +22,8 @@ import jakarta.persistence.*;
  * representa a un recepcionista en el dominio del problema.
  * 
  */
+@Entity
+@Data
 public class Recepcionista {
 
 	/** El id del recepcionista. */

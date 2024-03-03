@@ -5,12 +5,12 @@
  */
 package com.grupouno.hotelnila.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.grupouno.hotelnila.domain.Reserva;
 
 /**
  * The Interface ReservaRepository.
  */
-public interface ReservaRepository extends CrudRepository<Reserva, Long> {
+public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 }
