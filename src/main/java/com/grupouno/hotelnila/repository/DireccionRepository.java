@@ -7,13 +7,13 @@ package com.grupouno.hotelnila.repository;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.grupouno.hotelnila.domain.Direccion;
 
 /**
  * La interfaz DireccionRepository proporciona métodos para interactuar con la entidad Direccion.
  */
-public interface DireccionRepository extends CrudRepository<Direccion, Long> {
+public interface DireccionRepository extends JpaRepository<Direccion, Long> {
 	
 	/**
 	  *  * Busca direcciones por su nombre.
