@@ -26,9 +26,9 @@ public class Reserva {
     )
     @JsonIgnoreProperties("reserva")
     private Set<Habitacion> habitaciones = new HashSet<>();
-    /*
-    *@ManyToOne(fetch = FetchType.EAGER)
-    * @JsonIgnoreProperties("reserva")
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("reserva")
     private Recepcionista recepcionista;
-    * */
+    
 }

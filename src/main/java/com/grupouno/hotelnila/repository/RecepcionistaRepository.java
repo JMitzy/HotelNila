@@ -7,6 +7,8 @@
 
 package com.grupouno.hotelnila.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.grupouno.hotelnila.domain.Recepcionista;
@@ -16,4 +18,11 @@ import com.grupouno.hotelnila.domain.Recepcionista;
  */
 public interface RecepcionistaRepository extends JpaRepository<Recepcionista, Long> {
 
+	/**
+	 *  * Busca recepcionistas por su turno.
+	 *
+	 * @param turno del recepcionista a buscar
+	 */
+	List<Recepcionista> findByTurno(String turno);
+	
 }
