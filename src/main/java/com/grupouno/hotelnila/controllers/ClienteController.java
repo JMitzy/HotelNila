@@ -131,9 +131,9 @@ public class ClienteController {
 	 * @param id de la dirección
 	 * @return ResponseEntity con un mensaje de éxito
 	 * @throws EntityNotFoundException 
-	 * @throws IllegalOperationException t
+	 * @throws IllegalOperationException 
 	 */
-	@PutMapping(value = "asignarDireccion/{idCliente}/{idDireccion}")
+	@PutMapping(value = "/asignarDireccion/{idCliente}/{idDireccion}")
     public ResponseEntity<?> asignarDireccion (@PathVariable Long idCliente, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
         Cliente cliente = clienteService.asignarDirección(idCliente, idDireccion);
         ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);

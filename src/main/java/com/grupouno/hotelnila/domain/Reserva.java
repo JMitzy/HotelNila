@@ -1,6 +1,11 @@
 package com.grupouno.hotelnila.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,6 +15,7 @@ import java.util.List;
 
 @Data
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idReserva")
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,20 +24,18 @@ public class Reserva {
     private Date fechaInicio;
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "reserva_habitacion",
-            joinColumns = @JoinColumn(name = "idReserva"),
-            inverseJoinColumns = @JoinColumn(name = "idHabitacion")
-    )
-    @JsonIgnoreProperties("reserva")
-    private List<Habitacion> habitaciones = new ArrayList<>();
-    
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnoreProperties("reserva")
+   @ManyToMany
+    @JoinTable(
+	  name = "reserva_habitacion", 
+	  joinColumns = @JoinColumn(name = "idReserva"), 
+	  inverseJoinColumns = @JoinColumn(name = "idHabitacion"))
+	  private List<Habitacion> habitaciones =new ArrayList<>();
+   
+    @ManyToOne
     private Recepcionista recepcionista;
 
-    
-    //private Cliente cliente;
+    @ManyToOne
+   // @JsonBackReference
+    private Cliente cliente;
 
 }

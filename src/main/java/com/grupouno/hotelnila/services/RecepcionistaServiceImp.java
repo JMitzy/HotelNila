@@ -73,12 +73,14 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 	    Recepcionista recepcionista = recepcionistaRep.findById(idRecepcionista).orElseThrow(
 	            ()->new EntityNotFoundException(ErrorMessage.RECEPCIONISTA_NOT_FOUND)
 	    );
+
 	    if(!recepcionista.getReservas().isEmpty()){
-	        throw new IllegalOperationException("El recepcionista tiene reservas asignadas");
+	    	throw new IllegalOperationException("El recepcionista tiene reservas asignadas");
 	    }
 	    recepcionistaRep.deleteById(idRecepcionista);
 	}
 
+	
 	@Override
 	@Transactional
 	public Recepcionista asignarReserva(Long idRecepcionista, Long idReserva) throws EntityNotFoundException, IllegalOperationException {

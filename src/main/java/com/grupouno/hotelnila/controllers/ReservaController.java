@@ -1,3 +1,8 @@
+/*
+ * @file ReservaController.java;
+ * @Autor (c)2024 JhenniferMendoza
+ * @Created 4 mar. 2024,00:27:06
+ */
 package com.grupouno.hotelnila.controllers;
 
 import java.util.List;
@@ -97,6 +102,32 @@ public class ReservaController {
         ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Reserva actualizada con éxito",updatedReservaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } 
+	
+	/**
+	 	 * Asignar cliente a una reserva.
+	 *
+	 * @param id  de la reserva
+	 * @param id del cliente
+	 * @return ResponseEntity con un mensaje de éxito
+	 * @throws EntityNotFoundException 
+	 * @throws IllegalOperationException 
+	 */
+	@PutMapping(value = "/asignarCliente/{idReserva}/{idCliente}")
+    public ResponseEntity<?> asignarCliente (@PathVariable Long idReserva, @PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
+        Reserva reserva = resService.asignarCliente(idReserva, idCliente);
+        ReservaDTO reservaDTO = modelMapper.map(reserva, ReservaDTO.class);
+        ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Cliente asignado con éxito", reservaDTO);
+        return ResponseEntity.ok(response);
+    }
+	
+	@PutMapping(value = "/agregarHabitacion/{idReserva}/{idHabitacion}")
+    public ResponseEntity<?> agregarHabitacion (@PathVariable Long idReserva, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
+        Reserva reserva = resService.asignarHabitacion(idReserva, idHabitacion);
+        ReservaDTO reservaDTO = modelMapper.map(reserva, ReservaDTO.class);
+        ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Habitación agregada con éxito", reservaDTO);
+        return ResponseEntity.ok(response);
+    }
+	
 	
 }
 

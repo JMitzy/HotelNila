@@ -25,7 +25,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /**
@@ -33,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idCliente")
 public class Cliente {
 	
 	/** Representa el identificador único para la entidad Cliente. */
@@ -69,7 +72,7 @@ public class Cliente {
 	
 	/** Representa la dirección del cliente.  */
 	@OneToOne(mappedBy = "cliente")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private Direccion direc;
 	
 	/** Representa la lista de pedidos realizados por el cliente.  */
@@ -79,8 +82,8 @@ public class Cliente {
 	
 	
 	/** Representa la lista de reservas realizadas por el cliente */
-	//@OneToMany (mappedBy = "cliente")
+	@OneToMany (mappedBy = "cliente")
 	//@JsonManagedReference
-	//private List<Reserva> reservas = new ArrayList<>();
+	private List<Reserva> reservas = new ArrayList<>();
 	
 }
