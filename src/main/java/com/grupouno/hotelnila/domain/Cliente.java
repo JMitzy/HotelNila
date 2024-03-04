@@ -75,12 +75,6 @@ public class Cliente {
 	//@JsonManagedReference
 	private Direccion direc;
 	
-	/** Representa la lista de pedidos realizados por el cliente.  */
-	//@OneToMany (mappedBy = "cliente")
-	//@JsonManagedReference
-	//private List<Pedido> pedidos = new ArrayList<>();
-	
-	
 	/** Representa la lista de reservas realizadas por el cliente */
 	@OneToMany (mappedBy = "cliente")
 	//@JsonManagedReference

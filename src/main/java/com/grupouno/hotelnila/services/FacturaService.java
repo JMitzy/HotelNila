@@ -77,16 +77,5 @@ public interface FacturaService {
     */
 	
 	Factura asignarReserva(Long idFactura, Long idReserva)throws EntityNotFoundException, IllegalOperationException;
-	/**
-     * Asigna un pedido a una factura.
-     *
-     * @param ID de la factura al que se le asignará el pedido
-     * @param ID del pedido a asignar
-     * @return La Factura con el pedido asignado
-     * @throws EntityNotFoundException 
-     * @throws IllegalOperationException 
-     */
-	
-	Factura asignarPedido(Long idFactura, Long idPedido)throws EntityNotFoundException, IllegalOperationException;
 	
 }

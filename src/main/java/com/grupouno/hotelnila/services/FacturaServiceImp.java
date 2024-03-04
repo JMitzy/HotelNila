@@ -16,7 +16,6 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.ErrorMessage;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.repository.FacturaRepository;
-import com.grupouno.hotelnila.repository.PedidoRepository;
 import com.grupouno.hotelnila.repository.ReservaRepository;
 
 import jakarta.transaction.Transactional;
@@ -31,9 +30,6 @@ public class FacturaServiceImp implements FacturaService {
 	
 	@Autowired
 	private FacturaRepository facRep;
-	
-	@Autowired
-	private PedidoRepository pedRep;
 	
 	@Autowired
 	private ReservaRepository resRep;
@@ -129,22 +125,6 @@ public class FacturaServiceImp implements FacturaService {
 	 */
 	@Override
 	public Factura asignarReserva(Long idFactura, Long idReserva)
-			throws EntityNotFoundException, IllegalOperationException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Asignar pedido.
-	 *
-	 * @param idFactura the id factura
-	 * @param idPedido the id pedido
-	 * @return the factura
-	 * @throws EntityNotFoundException the entity not found exception
-	 * @throws IllegalOperationException the illegal operation exception
-	 */
-	@Override
-	public Factura asignarPedido(Long idFactura, Long idPedido)
 			throws EntityNotFoundException, IllegalOperationException {
 		// TODO Auto-generated method stub
 		return null;

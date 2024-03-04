@@ -54,10 +54,7 @@ public class Factura {
 	private Reserva reserva;
 	
 	
-	/** The pedidos. */
-	@OneToMany(mappedBy = "factura")//, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<Pedido> pedidos = new ArrayList<>();
+	
 
 
 
