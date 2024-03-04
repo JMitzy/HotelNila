@@ -6,10 +6,7 @@
 package com.grupouno.hotelnila.dto;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.grupouno.hotelnila.domain.Pedido;
 import com.grupouno.hotelnila.domain.Reserva;
 
 import lombok.Data;
@@ -37,7 +34,4 @@ public class FacturaDTO {
 	private Date fecha;
 	
 	private Reserva reserva;
-	
-	private List<Pedido> pedidos = new ArrayList<>();
-	
 }

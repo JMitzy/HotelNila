@@ -1,9 +1,6 @@
 package com.grupouno.hotelnila.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
@@ -32,10 +29,15 @@ public class Reserva {
 	  private List<Habitacion> habitaciones =new ArrayList<>();
    
     @ManyToOne
+    //@JsonBackReference
     private Recepcionista recepcionista;
 
     @ManyToOne
-   // @JsonBackReference
+    //@JsonBackReference
     private Cliente cliente;
+    
+    @OneToOne
+    //@JsonManagedReference
+    private Factura factura;
 
 }

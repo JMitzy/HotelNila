@@ -2,23 +2,18 @@ package com.grupouno.hotelnila.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.grupouno.hotelnila.domain.Cliente;
+
 import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.ErrorMessage;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
-import com.grupouno.hotelnila.repository.ClienteRepository;
+
 import com.grupouno.hotelnila.repository.HabitacionRepository;
 
 @Service

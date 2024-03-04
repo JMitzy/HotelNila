@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.grupouno.hotelnila.domain.Direccion;
-import com.grupouno.hotelnila.domain.Pedido;
 import com.grupouno.hotelnila.domain.Reserva;
 
 
@@ -30,6 +29,5 @@ public class ClienteDTO {
 	private String telefono;
 	private String email;
 	private Direccion direc;
-	private List<Pedido> pedidos = new ArrayList<>();
 	private List<Reserva> reservas = new ArrayList<>();
 }

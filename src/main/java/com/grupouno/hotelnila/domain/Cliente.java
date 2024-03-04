@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
@@ -19,14 +20,11 @@ import java.util.List;
 
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
@@ -45,6 +43,7 @@ public class Cliente {
 	
 	/** Representa el nombre del cliente. Limitado a un máximo de 30 caracteres */
 	@Size(max=30)
+	@NotBlank
 	private String nombreCli;
 	
 	/** Representa el apellido paterno del cliente. Limitado a un máximo de 15 caracteres */
@@ -72,14 +71,9 @@ public class Cliente {
 	
 	/** Representa la dirección del cliente.  */
 	@OneToOne(mappedBy = "cliente")
-	@JsonManagedReference
-	private Direccion direc;
-	
-	/** Representa la lista de pedidos realizados por el cliente.  */
-	//@OneToMany (mappedBy = "cliente")
+	@JoinColumn(name = "direc_id")
 	//@JsonManagedReference
-	//private List<Pedido> pedidos = new ArrayList<>();
-	
+	private Direccion direc;
 	
 	/** Representa la lista de reservas realizadas por el cliente */
 	@OneToMany (mappedBy = "cliente")

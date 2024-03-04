@@ -7,21 +7,18 @@
 
 package com.grupouno.hotelnila.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idFactura")
 public class Factura {
 	
 	/** The id factura. */
@@ -49,15 +47,13 @@ public class Factura {
 	private Date fecha;
 	
 	/** The reserva. */
-	@ManyToOne //Relacion de muchos a uno
-	@JsonBackReference
+	@OneToOne //Relacion de uno a uno
+	//@JsonBackReference
+	@JoinColumn(name = "res_id")
 	private Reserva reserva;
 	
 	
-	/** The pedidos. */
-	@OneToMany(mappedBy = "factura")//, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<Pedido> pedidos = new ArrayList<>();
+	
 
 
 

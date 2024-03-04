@@ -82,6 +82,25 @@ public class RecepcionistaController {
         ApiResponse<RecepcionistaDTO> response = new ApiResponse<>(true, "Recepcionista creado con éxito", savedRecepcionistaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    
+    /**
+     * Actualizar recepcionista.
+     *
+     * @param id del recepcionista
+     * @param Dto del recepcionista
+     * @return ResponseEntity con el recepcionista creado y un mensaje de éxito
+     * @throws EntityNotFoundException 
+     * @throws IllegalOperationException 
+     */
+    @PutMapping("/{idRecepcionista}")
+    public ResponseEntity<?> actualizarRecepcionista(@PathVariable Long idRecepcionista, @RequestBody RecepcionistaDTO recepcionistaDTO) throws EntityNotFoundException, IllegalOperationException {
+    	Recepcionista recepcionista = modelMapper.map(recepcionistaDTO, Recepcionista.class);
+        recepcionistaService.actualizarRecepcionista(idRecepcionista,recepcionista);
+        RecepcionistaDTO updatedRecepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
+        ApiResponse<RecepcionistaDTO> response = new ApiResponse<>(true, "Recepcionista actualizado con éxito",updatedRecepcionistaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } 
+
 
     /**
      * Elimina un recepcionista por su ID.

@@ -19,7 +19,6 @@ import com.grupouno.hotelnila.exception.ErrorMessage;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.repository.ClienteRepository;
 import com.grupouno.hotelnila.repository.DireccionRepository;
-import com.grupouno.hotelnila.repository.ReservaRepository;
 
 
 
@@ -61,6 +60,7 @@ public class ClienteServiceImp implements ClienteService {
         if (clientes.isEmpty()) {
             throw new EntityNotFoundException(ErrorMessage.CLIENTE_NOT_FOUND);
         }
+        
         return clientes.get();
 	}
 

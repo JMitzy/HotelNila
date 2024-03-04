@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import com.grupouno.hotelnila.domain.Cliente;
+import com.grupouno.hotelnila.domain.Factura;
 import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.domain.Recepcionista;
 
@@ -17,4 +18,5 @@ public class ReservaDTO {
 	private List<Habitacion> habitaciones = new ArrayList<>();
 	private Recepcionista recepcionista;
 	private Cliente cliente;
+	private Factura factura;
 }

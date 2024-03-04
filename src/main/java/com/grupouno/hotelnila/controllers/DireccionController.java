@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.grupouno.hotelnila.domain.Cliente;
 import com.grupouno.hotelnila.domain.Direccion;
-import com.grupouno.hotelnila.dto.ClienteDTO;
 import com.grupouno.hotelnila.dto.DireccionDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;

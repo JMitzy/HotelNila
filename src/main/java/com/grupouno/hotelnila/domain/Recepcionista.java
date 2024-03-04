@@ -12,7 +12,6 @@ import java.util.List;
 import javax.validation.constraints.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
@@ -56,7 +55,7 @@ public class Recepcionista {
 
 	/** Lista de reservas echas por el recepcionista. */
 	@OneToMany(mappedBy = "recepcionista")//, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	//@JsonManagedReference
 	private List<Reserva> reservas = new ArrayList<>();
 
 }

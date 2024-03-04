@@ -7,7 +7,6 @@ package com.grupouno.hotelnila.domain;
 
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -15,7 +14,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
@@ -42,8 +40,7 @@ public class Direccion {
 	
 	/**Representa el cliente asociado a esta dirección. */
 	 @OneToOne
-	 @JoinColumn(name = "cliente_id")
-	 @JsonBackReference
+	 //@JsonBackReference
 	private Cliente cliente; 
 	
 
