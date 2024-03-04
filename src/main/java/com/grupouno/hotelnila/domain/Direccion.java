@@ -43,7 +43,7 @@ public class Direccion {
 	/**Representa el cliente asociado a esta dirección. */
 	 @OneToOne
 	 @JoinColumn(name = "cliente_id")
-	// @JsonBackReference
+	 @JsonBackReference
 	private Cliente cliente; 
 	
 

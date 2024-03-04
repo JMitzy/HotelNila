@@ -72,7 +72,7 @@ public class Cliente {
 	
 	/** Representa la dirección del cliente.  */
 	@OneToOne(mappedBy = "cliente")
-	//@JsonManagedReference
+	@JsonManagedReference
 	private Direccion direc;
 	
 	/** Representa la lista de pedidos realizados por el cliente.  */
