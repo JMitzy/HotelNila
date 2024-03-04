@@ -18,7 +18,7 @@ public class Habitacion {
     private String estado;
     private Float precio;
 
-    @ManyToMany(mappedBy = "habitacion")
+    @ManyToMany(mappedBy = "habitaciones")
     @JsonManagedReference
     @JsonIgnore
     private Set<Reserva> reserva = new HashSet<>();

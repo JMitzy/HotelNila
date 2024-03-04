@@ -75,10 +75,11 @@ public class ClienteServiceImp implements ClienteService {
 	@Override
 	@Transactional
 	public Cliente crearCliente(Cliente cliente) throws IllegalOperationException {
-		if(!cliRep.findByDniCliente(cliente.getDni()).isEmpty()){
-	           throw new IllegalOperationException("El DNI del cliente ya está registrado.");
-	        }
-	        return cliRep.save(cliente);
+		
+		if(!cliRep.findBydni(cliente.getDni()).isEmpty()) {
+		    throw new IllegalOperationException("El DNI del cliente ya está registrado.");
+		}
+		return cliRep.save(cliente);
 	}
 
 	/**
@@ -98,11 +99,31 @@ public class ClienteServiceImp implements ClienteService {
         if(clienteEntity.isEmpty()){
             throw new EntityNotFoundException(ErrorMessage.CLIENTE_NOT_FOUND);
         }
-        if(!cliRep.findByDniCliente(cliente.getDni()).isEmpty()){
+        if(!cliRep.findBydni(cliente.getDni()).isEmpty()){
             throw new IllegalOperationException("El DNI del cliente ya está registrado.");
         }
         cliente.setIdCliente(idCliente);
         return cliRep.save(cliente);
+	}
+
+	@Override
+	public void eliminarCliente(Long idCliente) throws EntityNotFoundException, IllegalOperationException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Cliente asignarReserva(Long idCliente, Long idReserva)
+			throws EntityNotFoundException, IllegalOperationException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Cliente asignarDirección(Long idCliente, Long idDireccion)
+			throws EntityNotFoundException, IllegalOperationException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -112,16 +133,16 @@ public class ClienteServiceImp implements ClienteService {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException
 	 */
-	@Override
-	@Transactional
-	public void eliminarCliente(Long idCliente) throws EntityNotFoundException, IllegalOperationException {
+	//@Override
+	//@Transactional
+	/*public void eliminarCliente(Long idCliente) throws EntityNotFoundException, IllegalOperationException {
 		Cliente cliente = cliRep.findById(idCliente).orElseThrow(
                 ()->new EntityNotFoundException(ErrorMessage.CLIENTE_NOT_FOUND)
         );
-        if(!cliente.getReservas().isEmpty()){
+        //if(!cliente.getReservas().isEmpty()){
             throw new IllegalOperationException("El cliente tiene reservas asignadas");
         }
-        cliRep.deleteById(idCliente);
+      //  cliRep.deleteById(idCliente);
 
 	}
 
@@ -141,6 +162,6 @@ public class ClienteServiceImp implements ClienteService {
 			throws EntityNotFoundException, IllegalOperationException {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 
 }
