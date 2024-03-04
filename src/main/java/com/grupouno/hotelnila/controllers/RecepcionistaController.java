@@ -138,4 +138,20 @@ public class RecepcionistaController {
         ApiResponse<String> response = new ApiResponse<>(true, "Recepcionista eliminado con éxito", null);
         return ResponseEntity.ok(response);
     }
+    /**
+     * Asignar reserva a un recepcionista.
+     *
+     * @param idRecepcionista del recepcionista
+     * @param idReserva de la reserva
+     * @return ResponseEntity con un mensaje de éxito
+     * @throws EntityNotFoundException 
+     * @throws IllegalOperationException 
+     */
+    @PutMapping(value = "asignarReserva/{idRecepcionista}/{idReserva}")
+    public ResponseEntity<?> asignarReserva(@PathVariable Long idRecepcionista, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
+        Recepcionista recepcionista = recepcionistaService.asignarReserva(idRecepcionista, idReserva);
+        RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
+        ApiResponse<RecepcionistaDTO> response = new ApiResponse<>(true, "Reserva asignada con éxito", recepcionistaDTO);
+        return ResponseEntity.ok(response);
+    }
 }
