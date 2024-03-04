@@ -12,10 +12,13 @@ import java.util.List;
 
 import com.grupouno.hotelnila.domain.Reserva;
 
+import lombok.Data;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class RecepcionistaDTO.
  */
+@Data
 public class RecepcionistaDTO {
 
 	/** El id del recepcionista. */

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.services.ClienteService;
 import com.grupouno.hotelnila.util.ApiResponse;
+
 
 
 /**
@@ -58,7 +60,7 @@ public class ClienteController {
 	
 	
 	/**
-	* Obtiene un cliente por su ID.
+	 * Obtiene un cliente por su ID.
      *
      * @param ID del cliente a buscar
      * @return ResponseEntity con el cliente encontrado y un mensaje de éxito
@@ -87,6 +89,25 @@ public class ClienteController {
         ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Cliente creado con éxito", savedClienteDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+	
+	/**
+	 * Actualizar cliente.
+	 *
+	 * @param id del cliente
+	 * @param  Información actualizada del cliente
+     * @return El cliente actualizado
+     * @throws EntityNotFoundException 
+     * @throws IllegalOperationException
+	 */
+	@PutMapping("/{idCliente}")
+    public ResponseEntity<?> actualizarCliente(@PathVariable Long idCliente, @RequestBody ClienteDTO clienteDTO) throws EntityNotFoundException, IllegalOperationException {
+        Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
+        clienteService.actualizarCliente(idCliente,cliente);
+        ClienteDTO updatedClienteDTO = modelMapper.map(cliente, ClienteDTO.class);
+        ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Cliente actualizado con éxito",updatedClienteDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } 
+	
 	
 	/**
 	  * Elimina un cliente por su ID.

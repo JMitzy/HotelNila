@@ -22,33 +22,14 @@ import lombok.Data;
 @Data
 public class ClienteDTO {
 	
-	/** The id cliente. */
 	private Long idCliente;
-	
-	/** The nombre cli. */
 	private String nombreCli;
-	
-	/** The ape pat. */
 	private String apePat;
-	
-	/** The ape mat. */
 	private String apeMat;
-	
-	/** The dni. */
 	private String dni;
-	
-	/** The telefono. */
 	private String telefono;
-	
-	/** The email. */
 	private String email;
-	
-	/** The direc. */
 	private Direccion direc;
-	
-	/** The pedidos. */
 	private List<Pedido> pedidos = new ArrayList<>();
-	
-	/** The reservas. */
 	private List<Reserva> reservas = new ArrayList<>();
 }

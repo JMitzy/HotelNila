@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grupouno.hotelnila.domain.Cliente;
 import com.grupouno.hotelnila.domain.Direccion;
+import com.grupouno.hotelnila.dto.ClienteDTO;
 import com.grupouno.hotelnila.dto.DireccionDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -29,23 +32,23 @@ import com.grupouno.hotelnila.util.ApiResponse;
 
 
 /**
- * La clase DireccionController proporciona endpoints para operaciones relacionadas con clientes.
+ * La clase DireccionController proporciona endpoints para operaciones relacionadas con direcciones.
  */
 @RestController
 @RequestMapping("/api/direcciones")
 public class DireccionController {
-	/** The cliente service. */
+
 	@Autowired
     private DireccionService direcService;
 
-    /** The model mapper. */
+    /** ModelMapper para mapeo de DTOs.  */
     @Autowired
     private ModelMapper modelMapper;
 
 	/**
-	 * Listar clientes.
-	 *
-	 * @return the response entity
+	* Obtiene una lista de todos las direcciones.
+     *
+     * @return ResponseEntity con la lista de direcciones y un mensaje de éxito
 	 */
 	@GetMapping
     public ResponseEntity<?> listarDirecciones(){
@@ -58,11 +61,11 @@ public class DireccionController {
 	
 	
 	/**
-	 * Listar por ID.
-	 *
-	 * @param idDireccion the id direccion
-	 * @return the response entity
-	 * @throws EntityNotFoundException the entity not found exception
+	  * Obtiene una dirección por su ID.
+     *
+     * @param ID de la dirección a buscar
+     * @return ResponseEntity con la direccion encontrada y un mensaje de éxito
+     * @throws EntityNotFoundException
 	 */
 	@GetMapping("/{idDireccion}")
     public ResponseEntity<?> listarPorID(@PathVariable Long idDireccion) throws EntityNotFoundException {
@@ -73,14 +76,14 @@ public class DireccionController {
     }
 	
 	/**
-	 * Crear cliente.
-	 *
-	 * @param direccionDTO the direccion DTO
-	 * @return the response entity
-	 * @throws IllegalOperationException the illegal operation exception
+	 * Crea una nueva dirección.
+     *
+     * @param DTO de la dirección a crear
+     * @return ResponseEntity con la dirección creada y un mensaje de éxito
+     * @throws IllegalOperationException
 	 */
 	@PostMapping
-    public ResponseEntity<?> crearCliente(@RequestBody DireccionDTO direccionDTO) throws IllegalOperationException {
+    public ResponseEntity<?> crearDireccion(@RequestBody DireccionDTO direccionDTO) throws IllegalOperationException {
         Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
         direcService.crearDireccion(direccion);
         DireccionDTO savedDireccionDTO = modelMapper.map(direccion, DireccionDTO.class);
@@ -89,12 +92,30 @@ public class DireccionController {
     }
 	
 	/**
-	 * Eliminar cliente.
+	 * Actualizar direccion.
 	 *
-	 * @param idDireccion the id direccion
-	 * @return the response entity
-	 * @throws EntityNotFoundException the entity not found exception
-	 * @throws IllegalOperationException the illegal operation exception
+	 * @param id de la dirección
+	 * @param Información actualizada de la dirección
+	 * @return Dirección actualizada
+	 * @throws EntityNotFoundException 
+	 * @throws IllegalOperationException 
+	 */
+	@PutMapping("/{idDireccion}")
+    public ResponseEntity<?> actualizarDireccion(@PathVariable Long idDireccion, @RequestBody DireccionDTO direccionDTO) throws EntityNotFoundException, IllegalOperationException {
+		Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
+        direcService.actualizarDireccion(idDireccion,direccion);
+        DireccionDTO updatedDireccionDTO = modelMapper.map(direccion, DireccionDTO.class);
+        ApiResponse<DireccionDTO> response = new ApiResponse<>(true, "Direccion actualizada con éxito",updatedDireccionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    } 
+	
+	/**
+	   * Elimina una direccion por su ID.
+     *
+     * @param  ID de la dirección a eliminar
+     * @return ResponseEntity con un mensaje de éxito
+     * @throws EntityNotFoundException 
+     * @throws IllegalOperationException 
 	 */
 	@DeleteMapping("/{idDireccion}")
     public ResponseEntity<?> eliminarDireccion(@PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {

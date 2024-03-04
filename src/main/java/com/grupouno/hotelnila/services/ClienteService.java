@@ -63,18 +63,6 @@ public interface ClienteService {
     void eliminarCliente(Long idCliente) throws EntityNotFoundException, IllegalOperationException;
     
     /**
-     /**
-     * Asigna una reserva a un cliente.
-     *
-     * @param ID del cliente al que se le asignará la reserva
-     * @param ID de la reserva a asignar
-     * @return El cliente con la reserva asignada
-     * @throws EntityNotFoundException 
-     * @throws IllegalOperationException
-     */
-    Cliente asignarReserva(Long idCliente, Long idReserva) throws EntityNotFoundException, IllegalOperationException;
-    
-    /**
      * Asigna una dirección a un cliente.
      *
      * @param ID del cliente al que se le asignará la dirección

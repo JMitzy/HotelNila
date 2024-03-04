@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Entity
@@ -25,10 +25,12 @@ public class Reserva {
             inverseJoinColumns = @JoinColumn(name = "idHabitacion")
     )
     @JsonIgnoreProperties("reserva")
-    private Set<Habitacion> habitaciones = new HashSet<>();
+    private List<Habitacion> habitaciones = new ArrayList<>();
     
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("reserva")
     private Recepcionista recepcionista;
+    
+    //private Cliente cliente;
  
 }
