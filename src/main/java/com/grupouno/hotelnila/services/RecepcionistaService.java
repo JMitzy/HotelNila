@@ -10,6 +10,7 @@ package com.grupouno.hotelnila.services;
 import java.util.List;
 
 import com.grupouno.hotelnila.domain.Recepcionista;
+import com.grupouno.hotelnila.domain.Reserva;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 
@@ -74,4 +75,12 @@ public interface RecepcionistaService {
      */
     Recepcionista asignarReserva(Long idRecepcionista, Long idReserva) throws EntityNotFoundException, IllegalOperationException;
 	
+    /**
+     * Obtiene las reservas de un recepcionista.
+     *
+     * @param idRecepcionista ID del recepcionista
+     * @return Lista de reservas del recepcionista
+     * @throws EntityNotFoundException 
+     */
+    List<Reserva> obtenerReservas(Long idRecepcionista) throws EntityNotFoundException;
 }

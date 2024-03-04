@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.Recepcionista;
+import com.grupouno.hotelnila.domain.Reserva;
 import com.grupouno.hotelnila.dto.RecepcionistaDTO;
+import com.grupouno.hotelnila.dto.ReservaDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.services.RecepcionistaService;
@@ -131,6 +133,16 @@ public class RecepcionistaController {
         Recepcionista recepcionista = recepcionistaService.asignarReserva(idRecepcionista, idReserva);
         RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
         ApiResponse<RecepcionistaDTO> response = new ApiResponse<>(true, "Reserva asignada con éxito", recepcionistaDTO);
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping(value = "/{idRecepcionista}/reservas")
+    public ResponseEntity<?> obtenerReservas(@PathVariable Long idRecepcionista) throws EntityNotFoundException {
+        List<Reserva> reservas = recepcionistaService.obtenerReservas(idRecepcionista);
+        List<ReservaDTO> reservasDTO = reservas.stream()
+            .map(reserva -> modelMapper.map(reserva, ReservaDTO.class))
+            .collect(Collectors.toList());
+        ApiResponse<List<ReservaDTO>> response = new ApiResponse<>(true, "Reservas obtenidas con éxito", reservasDTO);
         return ResponseEntity.ok(response);
     }
 
