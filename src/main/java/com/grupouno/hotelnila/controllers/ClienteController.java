@@ -123,4 +123,21 @@ public class ClienteController {
         ApiResponse<String> response = new ApiResponse<>(true, "CLiente eliminado con éxito", null);
         return ResponseEntity.ok(response);
     }
+	
+	/**
+	 * Asignar direccion a un cliente.
+	 *
+	 * @param id  del cliente
+	 * @param id de la dirección
+	 * @return ResponseEntity con un mensaje de éxito
+	 * @throws EntityNotFoundException 
+	 * @throws IllegalOperationException t
+	 */
+	@PutMapping(value = "asignarDireccion/{idCliente}/{idDireccion}")
+    public ResponseEntity<?> asignarDireccion (@PathVariable Long idCliente, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
+        Cliente cliente = clienteService.asignarDirección(idCliente, idDireccion);
+        ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
+        ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Dirección asignada con éxito", clienteDTO);
+        return ResponseEntity.ok(response);
+    }
 }

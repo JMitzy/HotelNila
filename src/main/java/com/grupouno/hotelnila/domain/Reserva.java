@@ -30,7 +30,8 @@ public class Reserva {
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("reserva")
     private Recepcionista recepcionista;
+
     
     //private Cliente cliente;
- 
+
 }

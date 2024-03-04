@@ -130,8 +130,26 @@ public class ClienteServiceImp implements ClienteService {
 	@Transactional
 	public Cliente asignarDirección(Long idCliente, Long idDireccion)
 			throws EntityNotFoundException, IllegalOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		Cliente cliente = cliRep.findById(idCliente).orElseThrow(
+                ()->new EntityNotFoundException(ErrorMessage.CLIENTE_NOT_FOUND)
+        );
+
+        Direccion direccion = direcRep.findById(idDireccion).orElseThrow(
+                ()->new EntityNotFoundException(ErrorMessage.DIRECCION_NOT_FOUND)
+        );
+
+        // Verificar si la direccion ya tiene un cliente asignado
+        if (direccion.getCliente() != null) {
+            throw new IllegalOperationException("La dirección ya tiene un cliente asignado.");
+        }
+
+        // Asignar la direccion al cliente
+        cliente.setDirec(direccion);
+
+        // Guardar los cambios en la base de datos
+       cliRep.save(cliente);
+
+        return cliente;
 	}
 
 	

@@ -22,4 +22,5 @@ public class ErrorMessage {
 	public static final String HABITACION_NOT_FOUND="La habitación con el id proporcionado no fue encontrada";
 	public static final String RESERVA_NOT_FOUND="La reserva con el id proporcionado no fue encontrada";
 	
+	public static final String RECEPCIONISTA_NOT_FOUND = "El Recepcionista con el id proporcionado no fue encontrado";
 }
