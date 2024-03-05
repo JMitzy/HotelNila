@@ -128,7 +128,7 @@ public class ClienteServiceImp implements ClienteService {
 	
 	@Override
 	@Transactional
-	public Cliente asignarDirección(Long idCliente, Long idDireccion)
+	public Cliente asignarDireccion(Long idCliente, Long idDireccion)
 			throws EntityNotFoundException, IllegalOperationException {
 		Cliente cliente = cliRep.findById(idCliente).orElseThrow(
                 ()->new EntityNotFoundException(ErrorMessage.CLIENTE_NOT_FOUND)

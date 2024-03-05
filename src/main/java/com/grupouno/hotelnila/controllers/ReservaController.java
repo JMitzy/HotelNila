@@ -5,13 +5,16 @@
  */
 package com.grupouno.hotelnila.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +28,8 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.services.ReservaService;
 import com.grupouno.hotelnila.util.ApiResponse;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -74,7 +79,10 @@ public class ReservaController {
      * @throws IllegalOperationException
 	 */
 	@PostMapping
-    public ResponseEntity<?> crearReserva(@RequestBody ReservaDTO reservaDTO) throws IllegalOperationException {
+    public ResponseEntity<?> crearReserva(@RequestBody ReservaDTO reservaDTO, BindingResult result) throws IllegalOperationException {
+		if(result.hasErrors()) {
+			return validar(result);
+		}
 		Reserva reserva = modelMapper.map(reservaDTO, Reserva.class);
         resService.crearReserva(reserva);
         ReservaDTO savedReservaDTO = modelMapper.map(reserva, ReservaDTO.class);
@@ -92,7 +100,10 @@ public class ReservaController {
      * @throws IllegalOperationException
 	 */
 	@PutMapping("/{idCliente}")
-    public ResponseEntity<?> actualizarReserva(@PathVariable Long idReserva, @RequestBody ReservaDTO reservaDTO) throws EntityNotFoundException, IllegalOperationException {
+    public ResponseEntity<?> actualizarReserva(@Valid @RequestBody ReservaDTO reservaDTO,BindingResult result, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
+		if(result.hasErrors()) {
+        	return validar(result);
+        }
 		Reserva reserva = modelMapper.map(reservaDTO, Reserva.class);
         resService.actualizarReserva(idReserva,reserva);
         ReservaDTO updatedReservaDTO = modelMapper.map(reserva, ReservaDTO.class);
@@ -117,14 +128,13 @@ public class ReservaController {
         return ResponseEntity.ok(response);
     }
 	
-	@PutMapping(value = "/agregarHabitacion/{idReserva}/{idHabitacion}")
-    public ResponseEntity<?> agregarHabitacion (@PathVariable Long idReserva, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
-        Reserva reserva = resService.asignarHabitacion(idReserva, idHabitacion);
-        ReservaDTO reservaDTO = modelMapper.map(reserva, ReservaDTO.class);
-        ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Habitación agregada con éxito", reservaDTO);
-        return ResponseEntity.ok(response);
+	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
+        Map<String, String> errores = new HashMap<>();
+        result.getFieldErrors().forEach(err -> {
+            errores.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(errores);
     }
-	
 	
 }
 

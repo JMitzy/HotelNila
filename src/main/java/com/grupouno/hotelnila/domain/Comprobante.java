@@ -1,6 +1,6 @@
 
 /*
- * @file Factura.java;
+ * @file Comprobante.java;
  * @Autor (c)2024 AndersonDietrich
  * @Created 3 mar. 2024,23:24:58
  */
@@ -43,6 +43,8 @@ public class Comprobante {
     //@Past(message = "La fecha del comprobante debe estar en el pasado")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaComprobante;
+    
+	private String estado;
 	
 	/** Reserva a la que está asociada el comprobante */
 	@OneToOne //Relacion de uno a uno

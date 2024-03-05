@@ -1,5 +1,5 @@
 /*
- * @file FacturaServiceImp.java;
+ * @file ComprobanteServiceImp.java;
  * @Autor (c)2024 AndersonDietrich
  * @Created 3 mar. 2024,19:55:08
  */
@@ -44,7 +44,6 @@ public class ComprobanteServiceImp implements ComprobanteService {
 	@Override
 	@Transactional
 	public List<Comprobante> listarComprobantes() {
-		// TODO Auto-generated method stub
 		return (List<Comprobante>) facRep.findAll();
 	}
 

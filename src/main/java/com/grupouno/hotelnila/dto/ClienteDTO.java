@@ -15,19 +15,37 @@ import com.grupouno.hotelnila.domain.Reserva;
 import lombok.Data;
 
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class ClienteDTO.
+ * DTO del cliente.
  */
 @Data
 public class ClienteDTO {
 	
+	/** Id del cliente. */
 	private Long idCliente;
+	
+	/** Nombre del cliente. */
 	private String nombreCli;
+	
+	/** Apellido paterno del cliente */
 	private String apePat;
+	
+	/** Apellido materno del cliente */
 	private String apeMat;
+	
+	/** Dni del cliente*/
 	private String dni;
+	
+	/** Telefono del cliente*/
 	private String telefono;
+	
+	/** Email del cliente */
 	private String email;
+	
+	/** Direccion del cliente*/
 	private Direccion direc;
+	
+	/** Reservas realizadas por el cliente*/
 	private List<Reserva> reservas = new ArrayList<>();
 }

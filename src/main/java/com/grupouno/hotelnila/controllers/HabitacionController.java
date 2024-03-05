@@ -1,12 +1,15 @@
 package com.grupouno.hotelnila.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +23,8 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.services.HabitacionService;
 import com.grupouno.hotelnila.util.ApiResponse;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/habitaciones")
@@ -69,7 +74,10 @@ public class HabitacionController {
      * @throws IllegalOperationException
 	 */
 	@PostMapping
-    public ResponseEntity<?> crearCliente(@RequestBody HabitacionDTO habitacionDTO) throws IllegalOperationException {
+    public ResponseEntity<?> crearHabitacion(@RequestBody HabitacionDTO habitacionDTO, BindingResult result) throws IllegalOperationException {
+		if(result.hasErrors()) {
+			return validar(result);
+		}
 		Habitacion habitacion = modelMapper.map(habitacionDTO, Habitacion.class);
         habiService.crearHabitacion(habitacion);
         HabitacionDTO savedHabitacionDTO = modelMapper.map(habitacion, HabitacionDTO.class);
@@ -87,12 +95,22 @@ public class HabitacionController {
      * @throws IllegalOperationException
 	 */
 	@PutMapping("/{idHabitacion}")
-    public ResponseEntity<?> actualizarHabitacion(@PathVariable Long idHabitacion, @RequestBody HabitacionDTO habitacionDTO) throws EntityNotFoundException, IllegalOperationException {
+    public ResponseEntity<?> actualizarHabitacion(@Valid @RequestBody HabitacionDTO habitacionDTO, BindingResult result, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
+		if(result.hasErrors()) {
+        	return validar(result);
+        }
 		Habitacion habitacion = modelMapper.map(habitacionDTO, Habitacion.class);
         habiService.actualizarHabitacion(idHabitacion, habitacion);
         HabitacionDTO updatedHabitacionDTO = modelMapper.map(habitacion, HabitacionDTO.class);
         ApiResponse<HabitacionDTO> response = new ApiResponse<>(true, "Habitación actualizada con con éxito",updatedHabitacionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } 
+	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
+        Map<String, String> errores = new HashMap<>();
+        result.getFieldErrors().forEach(err -> {
+            errores.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
+        });
+        return ResponseEntity.badRequest().body(errores);
+    }
 
 }

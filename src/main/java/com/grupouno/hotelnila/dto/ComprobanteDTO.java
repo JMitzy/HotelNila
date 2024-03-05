@@ -1,5 +1,5 @@
 /*
- * @file FacturaDTO.java;
+ * @file ComprobanteDTO.java;
  * @Autor (c)2024 AndersonDietrich
  * @Created 3 mar. 2024,23:15:07
  */

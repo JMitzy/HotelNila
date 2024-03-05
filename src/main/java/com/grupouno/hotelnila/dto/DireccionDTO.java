@@ -11,22 +11,21 @@ import com.grupouno.hotelnila.domain.Cliente;
 import lombok.Data;
 
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DireccionDTO.
+ * DTO de dirección.
  */
 @Data
 public class DireccionDTO {
 	
-	/** The id direccion. */
+	/** Id de la dirección */
 	private Long idDireccion;
 	
-	/** The nombre direc. */
+	/** Nombre de la dirección */
 	private String nombreDirec;
 	
-	/** The ciudad. */
+	/** Ciudad en la que se encuentra la dirección */
 	private String ciudad;
 	
-	/** The cliente. */
+	/** Cliente a quien le pertenece la dirección */
 	private Cliente cliente; 
 }

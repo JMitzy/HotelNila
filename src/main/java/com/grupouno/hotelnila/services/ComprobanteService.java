@@ -1,5 +1,5 @@
 /*
- * @file FacturaService.java;
+ * @file ComprobanteService.java;
  * @Autor (c)2024 AndersonDietrich
  * @Created 3 mar. 2024,19:14:05
  */

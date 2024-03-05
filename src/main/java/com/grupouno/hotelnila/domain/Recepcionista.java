@@ -18,7 +18,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * La clase Recepcionista es una entidad en la aplicación que 
  * representa a un recepcionista en el dominio del problema.

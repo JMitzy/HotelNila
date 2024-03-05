@@ -146,7 +146,7 @@ public class ClienteController {
 	 */
 	@PutMapping(value = "/asignarDireccion/{idCliente}/{idDireccion}")
     public ResponseEntity<?> asignarDireccion (@PathVariable Long idCliente, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
-        Cliente cliente = clienteService.asignarDirección(idCliente, idDireccion);
+        Cliente cliente = clienteService.asignarDireccion(idCliente, idDireccion);
         ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
         ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Dirección asignada con éxito", clienteDTO);
         return ResponseEntity.ok(response);

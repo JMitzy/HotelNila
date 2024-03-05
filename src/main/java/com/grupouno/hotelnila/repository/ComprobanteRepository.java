@@ -1,5 +1,5 @@
 /*
- * @file FacturaRepository.java;
+ * @file ComprobanteRepository.java;
  * @Autor (c)2024 AndersonDietrich
  * @Created 3 mar. 2024,23:25:28
  */
@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.grupouno.hotelnila.domain.Comprobante;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface FacturaRepository.
  */

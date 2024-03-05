@@ -1,3 +1,8 @@
+/*
+ * @file ReservaServiceImp.java;
+ * @Autor (c)2024 JuanRuiz
+ * @Created 5 mar. 2024,03:11:49
+ */
 package com.grupouno.hotelnila.services;
 
 import java.util.List;
@@ -18,24 +23,43 @@ import com.grupouno.hotelnila.repository.HabitacionRepository;
 import com.grupouno.hotelnila.repository.ReservaRepository;
 
 
+
+/**
+ * The Class ReservaServiceImp.
+ */
 @Service
 public class ReservaServiceImp implements ReservaService {
 
+	/** The res rep. */
 	@Autowired
 	private ReservaRepository resRep;
 	
+	/** The cli rep. */
 	@Autowired
 	private ClienteRepository cliRep;
 	
+	/** The habi rep. */
 	@Autowired
 	private HabitacionRepository habiRep;
 
+	/**
+	 * Listar reservas.
+	 *
+	 * @return the list
+	 */
 	@Override
 	@Transactional
 	public List<Reserva> listarReservas() {
 		return (List<Reserva>) resRep.findAll();
 	}
 
+	/**
+	 * Buscar por id reserva.
+	 *
+	 * @param idReserva the id reserva
+	 * @return the reserva
+	 * @throws EntityNotFoundException the entity not found exception
+	 */
 	@Override
 	@Transactional
 	public Reserva buscarPorIdReserva(Long idReserva) throws EntityNotFoundException {
@@ -46,12 +70,28 @@ public class ReservaServiceImp implements ReservaService {
         return reservas.get();
 	}
 
+	/**
+	 * Crear reserva.
+	 *
+	 * @param reserva the reserva
+	 * @return the reserva
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@Override
 	@Transactional
 	public Reserva crearReserva(Reserva reserva) throws IllegalOperationException {
 		return resRep.save(reserva);
 	}
 
+	/**
+	 * Actualizar reserva.
+	 *
+	 * @param idReserva the id reserva
+	 * @param reserva the reserva
+	 * @return the reserva
+	 * @throws EntityNotFoundException the entity not found exception
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@Override
 	@Transactional
 	public Reserva actualizarReserva(Long idReserva, Reserva reserva)
@@ -66,6 +106,15 @@ public class ReservaServiceImp implements ReservaService {
 	}
 
 
+	/**
+	 * Asignar cliente.
+	 *
+	 * @param idReserva the id reserva
+	 * @param idCliente the id cliente
+	 * @return the reserva
+	 * @throws EntityNotFoundException the entity not found exception
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@Override
 	@Transactional
 	public Reserva asignarCliente(Long idReserva, Long idCliente)throws 
@@ -87,26 +136,6 @@ public class ReservaServiceImp implements ReservaService {
     return reserva;
 	}
 
-	@Override
-	@Transactional
-	public Reserva asignarHabitacion(Long idReserva, Long idHabitacion)throws 
-	EntityNotFoundException, IllegalOperationException {
-	Reserva reserva = resRep.findById(idReserva).orElseThrow(
-            ()->new EntityNotFoundException(ErrorMessage.RESERVA_NOT_FOUND)
-    );
-
-    Habitacion habitacion = habiRep.findById(idHabitacion).orElseThrow(
-            ()->new EntityNotFoundException(ErrorMessage.HABITACION_NOT_FOUND)
-    );
-
-    // Agregar habitacion a la reserva
-    reserva.getHabitaciones().add(habitacion);
-
-    // Guardar los cambios en la base de datos
-    resRep.save(reserva);
-
-    return reserva;
-	}
 	
 	
 }

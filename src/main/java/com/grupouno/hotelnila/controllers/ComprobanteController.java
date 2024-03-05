@@ -1,3 +1,8 @@
+/*
+ * @file ComprobanteController.java;
+ * @Autor (c)2024 AndersonDietrich
+ * @Created 5 mar. 2024,03:32:34
+ */
 package com.grupouno.hotelnila.controllers;
 
 import java.util.HashMap;
@@ -28,17 +33,28 @@ import com.grupouno.hotelnila.util.ApiResponse;
 
 import jakarta.validation.Valid;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ComprobanteController.
+ */
 @RestController
 @RequestMapping("/api/comprobantes")
 public class ComprobanteController {
 	
 
+	/** The comprobante service. */
 	@Autowired
 	private ComprobanteService comprobanteService;
 	
+	/** The model mapper. */
 	@Autowired
 	private ModelMapper modelMapper;
 	
+	/**
+	 * Listar comprobantes.
+	 *
+	 * @return the response entity
+	 */
 	@GetMapping
 	public ResponseEntity<?> listarComprobantes(){
         List<Comprobante> comprobantes = comprobanteService.listarComprobantes();
@@ -48,6 +64,13 @@ public class ComprobanteController {
         return ResponseEntity.ok(response);
     }
 	
+	/**
+	 * Listar por ID.
+	 *
+	 * @param idComprobante the id comprobante
+	 * @return the response entity
+	 * @throws EntityNotFoundException the entity not found exception
+	 */
 	@GetMapping("/{idComprobante}")
 	public ResponseEntity<?> listarPorID(@PathVariable Long idComprobante) throws EntityNotFoundException {
         Comprobante comprobantes = comprobanteService.buscarPorIdComprobante(idComprobante);
@@ -56,6 +79,14 @@ public class ComprobanteController {
         return ResponseEntity.ok(response);
     }
 	
+	/**
+	 * Crear comprobante.
+	 *
+	 * @param comprobanteDTO the comprobante DTO
+	 * @param result the result
+	 * @return the response entity
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@PostMapping
 	public ResponseEntity<?> crearComprobante(@Valid @RequestBody ComprobanteDTO comprobanteDTO,BindingResult result ) throws IllegalOperationException {
 		if(result.hasErrors()) {
@@ -68,6 +99,16 @@ public class ComprobanteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 	
+	/**
+	 * Actualizar comprobante.
+	 *
+	 * @param comprobanteDTO the comprobante DTO
+	 * @param result the result
+	 * @param idComprobante the id comprobante
+	 * @return the response entity
+	 * @throws EntityNotFoundException the entity not found exception
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@PutMapping("/{idComprobante}")
 	public ResponseEntity<?> actualizarComprobante(@Valid @RequestBody ComprobanteDTO comprobanteDTO,BindingResult result, @PathVariable Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
 		if(result.hasErrors()) {
@@ -80,6 +121,14 @@ public class ComprobanteController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 	
+	/**
+	 * Eliminar comprobante.
+	 *
+	 * @param idComprobante the id comprobante
+	 * @return the response entity
+	 * @throws EntityNotFoundException the entity not found exception
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@DeleteMapping("/{idComprobante}")
 	public ResponseEntity<?> eliminarComprobante(@PathVariable Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
 		comprobanteService.eliminarComprobante(idComprobante);
@@ -87,6 +136,15 @@ public class ComprobanteController {
         return ResponseEntity.ok(response);
     }
 	
+	/**
+	 * Asignar reserva.
+	 *
+	 * @param idComprobante the id comprobante
+	 * @param idReserva the id reserva
+	 * @return the response entity
+	 * @throws EntityNotFoundException the entity not found exception
+	 * @throws IllegalOperationException the illegal operation exception
+	 */
 	@PutMapping(value = "/asignarReserva/{idComprobante}/{idReserva}")
     public ResponseEntity<?> asignarReserva (@PathVariable Long idComprobante, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
         Comprobante comprobante = comprobanteService.asignarReserva(idComprobante, idReserva);
@@ -94,6 +152,13 @@ public class ComprobanteController {
         ApiResponse<ComprobanteDTO> response = new ApiResponse<>(true, "Reserva asignada con éxito", comprobanteDTO);
         return ResponseEntity.ok(response);
     }
+	
+	/**
+	 * Validar.
+	 *
+	 * @param result the result
+	 * @return the response entity
+	 */
 	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

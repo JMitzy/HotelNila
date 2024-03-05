@@ -71,6 +71,6 @@ public interface ClienteService {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException 
      */
-    Cliente asignarDirección(Long idCliente, Long idDireccion) throws EntityNotFoundException, IllegalOperationException;
+    Cliente asignarDireccion(Long idCliente, Long idDireccion) throws EntityNotFoundException, IllegalOperationException;
 
 }
