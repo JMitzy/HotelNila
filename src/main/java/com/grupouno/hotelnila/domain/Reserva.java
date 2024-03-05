@@ -38,6 +38,6 @@ public class Reserva {
     
     @OneToOne
     //@JsonManagedReference
-    private Factura factura;
+    private Comprobante comprobante;
 
 }

@@ -9,12 +9,12 @@ package com.grupouno.hotelnila.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.grupouno.hotelnila.domain.Factura;
+import com.grupouno.hotelnila.domain.Comprobante;
 
 
 // TODO: Auto-generated Javadoc
 /**
  * The Interface FacturaRepository.
  */
-public interface FacturaRepository extends JpaRepository<Factura, Long> {
+public interface ComprobanteRepository extends JpaRepository<Comprobante, Long> {
 }

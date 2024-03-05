@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -31,6 +32,7 @@ public class Direccion {
 	private Long idDireccion;
 	
 	/** Representa el nombre o descripción de la dirección. Limitado a un máximo de 50 caracteres.*/
+	@NotBlank
 	@Size(max=50)
 	private String nombreDirec;
 	

@@ -5,13 +5,16 @@
  */
 package com.grupouno.hotelnila.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +29,8 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.services.DireccionService;
 import com.grupouno.hotelnila.util.ApiResponse;
+
+import jakarta.validation.Valid;
 
 
 /**
@@ -80,8 +85,11 @@ public class DireccionController {
      * @throws IllegalOperationException
 	 */
 	@PostMapping
-    public ResponseEntity<?> crearDireccion(@RequestBody DireccionDTO direccionDTO) throws IllegalOperationException {
-        Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
+    public ResponseEntity<?> crearDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result) throws IllegalOperationException {
+		if(result.hasErrors()) {
+        	return validar(result);
+        }
+		Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
         direcService.crearDireccion(direccion);
         DireccionDTO savedDireccionDTO = modelMapper.map(direccion, DireccionDTO.class);
         ApiResponse<DireccionDTO> response = new ApiResponse<>(true, "Dirección creada con éxito", savedDireccionDTO);
@@ -98,7 +106,7 @@ public class DireccionController {
 	 * @throws IllegalOperationException 
 	 */
 	@PutMapping("/{idDireccion}")
-    public ResponseEntity<?> actualizarDireccion(@PathVariable Long idDireccion, @RequestBody DireccionDTO direccionDTO) throws EntityNotFoundException, IllegalOperationException {
+    public ResponseEntity<?> actualizarDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
 		Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
         direcService.actualizarDireccion(idDireccion,direccion);
         DireccionDTO updatedDireccionDTO = modelMapper.map(direccion, DireccionDTO.class);
@@ -120,6 +128,14 @@ public class DireccionController {
         ApiResponse<String> response = new ApiResponse<>(true, "Direccion eliminada con éxito", null);
         return ResponseEntity.ok(response);
     }
+	
+	 private ResponseEntity<Map<String, String>> validar(BindingResult result) {
+	        Map<String, String> errores = new HashMap<>();
+	        result.getFieldErrors().forEach(err -> {
+	            errores.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
+	        });
+	        return ResponseEntity.badRequest().body(errores);
+	    }
 }
 
 

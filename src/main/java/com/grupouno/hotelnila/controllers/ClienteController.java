@@ -5,13 +5,16 @@
  */
 package com.grupouno.hotelnila.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +30,8 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.services.ClienteService;
 import com.grupouno.hotelnila.util.ApiResponse;
+
+import jakarta.validation.Valid;
 
 
 
@@ -82,8 +87,11 @@ public class ClienteController {
      * @throws IllegalOperationException
 	 */
 	@PostMapping
-    public ResponseEntity<?> crearCliente(@RequestBody ClienteDTO clienteDTO) throws IllegalOperationException {
-        Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
+    public ResponseEntity<?> crearCliente(@Valid @RequestBody ClienteDTO clienteDTO, BindingResult result) throws IllegalOperationException {
+		if(result.hasErrors()) {
+			return validar(result);
+		}
+		Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
         clienteService.crearCliente(cliente);
         ClienteDTO savedClienteDTO = modelMapper.map(cliente, ClienteDTO.class);
         ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Cliente creado con éxito", savedClienteDTO);
@@ -100,8 +108,11 @@ public class ClienteController {
      * @throws IllegalOperationException
 	 */
 	@PutMapping("/{idCliente}")
-    public ResponseEntity<?> actualizarCliente(@PathVariable Long idCliente, @RequestBody ClienteDTO clienteDTO) throws EntityNotFoundException, IllegalOperationException {
-        Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
+    public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteDTO clienteDTO,BindingResult result, @PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
+		if(result.hasErrors()) {
+        	return validar(result);
+        }
+		Cliente cliente = modelMapper.map(clienteDTO, Cliente.class);
         clienteService.actualizarCliente(idCliente,cliente);
         ClienteDTO updatedClienteDTO = modelMapper.map(cliente, ClienteDTO.class);
         ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Cliente actualizado con éxito",updatedClienteDTO);
@@ -140,4 +151,11 @@ public class ClienteController {
         ApiResponse<ClienteDTO> response = new ApiResponse<>(true, "Dirección asignada con éxito", clienteDTO);
         return ResponseEntity.ok(response);
     }
+	 private ResponseEntity<Map<String, String>> validar(BindingResult result) {
+	        Map<String, String> errores = new HashMap<>();
+	        result.getFieldErrors().forEach(err -> {
+	            errores.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
+	        });
+	        return ResponseEntity.badRequest().body(errores);
+	    }
 }

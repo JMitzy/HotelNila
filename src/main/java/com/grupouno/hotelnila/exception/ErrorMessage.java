@@ -23,6 +23,6 @@ public class ErrorMessage {
 	public static final String RESERVA_NOT_FOUND="La reserva con el id proporcionado no fue encontrada";
 	
 	public static final String RECEPCIONISTA_NOT_FOUND = "El Recepcionista con el id proporcionado no fue encontrado";
-	public static final String FACTURA_NOT_FOUND = "La factura con el id proporcionado no fue encontrada";
+	public static final String COMPROBANTE_NOT_FOUND = "El comprobante con el id proporcionado no fue encontrada";
 	public static final String PEDIDO_NOT_FOUND = "El pedido con el id proporcionado no fue encontrado";
 }

@@ -13,15 +13,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -66,7 +66,7 @@ public class Cliente {
 	private String telefono;
 	
 	/**  Representa la dirección de correo electrónico del cliente */
-	@Email
+	@Email(message = "El formato del email es incorrec")
 	private String email;
 	
 	/** Representa la dirección del cliente.  */

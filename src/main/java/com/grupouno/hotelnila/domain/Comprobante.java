@@ -9,6 +9,8 @@ package com.grupouno.hotelnila.domain;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +18,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -26,27 +30,21 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
  */
 @Entity
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idFactura")
-public class Factura {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idComprobante")
+public class Comprobante {
 	
-	/** The id factura. */
+	/** Id de la factura */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idFactura;
+	private Long idComprobante;
 	
-	/** The monto total. */
-	private Double montoTotal;
+	/** Fecha en la que se crea el comprobante */
+	@NotNull(message = "La fecha del comprobante no puede ser nula")
+    //@Past(message = "La fecha del comprobante debe estar en el pasado")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date fechaComprobante;
 	
-	/** The igv. */
-	private Double igv;
-	
-	/** The descripcion. */
-	private String descripcion;
-	
-	/** The fecha. */
-	private Date fecha;
-	
-	/** The reserva. */
+	/** Reserva a la que está asociada el comprobante */
 	@OneToOne //Relacion de uno a uno
 	//@JsonBackReference
 	@JoinColumn(name = "res_id")

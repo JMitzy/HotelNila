@@ -11,27 +11,18 @@ import com.grupouno.hotelnila.domain.Reserva;
 
 import lombok.Data;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FacturaDTO.
  */
 @Data
-public class FacturaDTO {
+public class ComprobanteDTO {
 
-	/** The id factura. */
-	private Long idFactura;
+	/** The id comprobante. */
+	private Long idComprobante;
 	
-	/** The monto total. */
-	private Double montoTotal;
+	/** The fecha comprobante. */
+	private Date fechaComprobante;
 	
-	/** The igv. */
-	private Double igv;
-	
-	/** The descripcion. */
-	private String descripcion;
-	
-	/** The fecha. */
-	private Date fecha;
-	
+	/** The reserva. */
 	private Reserva reserva;
 }

@@ -11,25 +11,26 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.grupouno.hotelnila.domain.Factura;
+import com.grupouno.hotelnila.domain.Comprobante;
+import com.grupouno.hotelnila.domain.Reserva;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.ErrorMessage;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
-import com.grupouno.hotelnila.repository.FacturaRepository;
+import com.grupouno.hotelnila.repository.ComprobanteRepository;
 import com.grupouno.hotelnila.repository.ReservaRepository;
 
 import jakarta.transaction.Transactional;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class FacturaServiceImp.
  */
 @Service
-public class FacturaServiceImp implements FacturaService {
+public class ComprobanteServiceImp implements ComprobanteService {
 	
 	
 	@Autowired
-	private FacturaRepository facRep;
+	private ComprobanteRepository facRep;
 	
 	@Autowired
 	private ReservaRepository resRep;
@@ -42,9 +43,9 @@ public class FacturaServiceImp implements FacturaService {
 	
 	@Override
 	@Transactional
-	public List<Factura> listarFacturas() {
+	public List<Comprobante> listarComprobantes() {
 		// TODO Auto-generated method stub
-		return (List<Factura>) facRep.findAll();
+		return (List<Comprobante>) facRep.findAll();
 	}
 
 	/**
@@ -56,12 +57,11 @@ public class FacturaServiceImp implements FacturaService {
 	 */
 	@Override
 	@Transactional
-	public Factura buscarPorIdFactura(Long idFactura) throws EntityNotFoundException {
-		Optional<Factura> facturas = facRep.findById(idFactura);
+	public Comprobante buscarPorIdComprobante(Long idComprobante) throws EntityNotFoundException {
+		Optional<Comprobante> facturas = facRep.findById(idComprobante);
 		if (facturas.isEmpty()) {
-			throw new EntityNotFoundException(ErrorMessage.FACTURA_NOT_FOUND);
+			throw new EntityNotFoundException(ErrorMessage.COMPROBANTE_NOT_FOUND);
 		}
-		// TODO Auto-generated method stub
 		return facturas.get();
 	}
 
@@ -74,9 +74,8 @@ public class FacturaServiceImp implements FacturaService {
 	 */
 	@Override
 	@Transactional
-	public Factura crearFactura(Factura factura) throws IllegalOperationException {
-		// TODO Auto-generated method stub
-		return facRep.save(factura);
+	public Comprobante crearComprobante(Comprobante comprobante) throws IllegalOperationException {
+		return facRep.save(comprobante);
 	}
 
 	/**
@@ -90,15 +89,15 @@ public class FacturaServiceImp implements FacturaService {
 	 */
 	@Override
 	@Transactional
-	public Factura actualizarFactura(Long idFactura, Factura factura)
+	public Comprobante actualizarComprobante(Long idComprobante, Comprobante comprobante)
 			throws EntityNotFoundException, IllegalOperationException {
-		Optional<Factura> facturaEntity = facRep.findById(idFactura);
-		if (facturaEntity.isEmpty()) {
-			throw new EntityNotFoundException(ErrorMessage.CLIENTE_NOT_FOUND);
+		Optional<Comprobante> comprobanteEntity = facRep.findById(idComprobante);
+		if (comprobanteEntity.isEmpty()) {
+			throw new EntityNotFoundException(ErrorMessage.COMPROBANTE_NOT_FOUND);
 		}
-		factura.setIdFactura(idFactura);
+		comprobante.setIdComprobante(idComprobante);
 		// TODO Auto-generated method stub
-		return facRep.save(factura);
+		return facRep.save(comprobante);
 	}
 
 	/**
@@ -109,9 +108,12 @@ public class FacturaServiceImp implements FacturaService {
 	 * @throws IllegalOperationException the illegal operation exception
 	 */
 	@Override
-	public void eliminarFactura(Long idFactura) throws EntityNotFoundException, IllegalOperationException {
-		// TODO Auto-generated method stub
-
+	@Transactional
+	public void eliminarComprobante(Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
+		Comprobante comprobante = facRep.findById(idComprobante).orElseThrow(
+                ()->new EntityNotFoundException(ErrorMessage.COMPROBANTE_NOT_FOUND)
+        );
+		facRep.deleteById(idComprobante);
 	}
 
 	/**
@@ -124,10 +126,26 @@ public class FacturaServiceImp implements FacturaService {
 	 * @throws IllegalOperationException the illegal operation exception
 	 */
 	@Override
-	public Factura asignarReserva(Long idFactura, Long idReserva)
-			throws EntityNotFoundException, IllegalOperationException {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public Comprobante asignarReserva(Long idComprobante, Long idReserva) 
+			throws EntityNotFoundException, IllegalOperationException{
+		
+	Comprobante comprobante = facRep.findById(idComprobante).orElseThrow(
+            ()->new EntityNotFoundException(ErrorMessage.COMPROBANTE_NOT_FOUND)
+    );
+	
+	Reserva reserva = resRep.findById(idReserva).orElseThrow(
+            ()->new EntityNotFoundException(ErrorMessage.RESERVA_NOT_FOUND)
+    );
+	
+	// Verificar si la reserva ya tiene un comprobate asignado
+    if (reserva.getComprobante() != null) {
+        throw new IllegalOperationException("La reserva ya tiene un comprobante asignado.");
 	}
+    comprobante.setReserva(reserva);
+    facRep.save(comprobante);
+	return comprobante;
+
 
 }
+	}
