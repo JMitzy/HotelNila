@@ -1,6 +1,0 @@
-#GRUPO UNO - HOTEL NILA
-EJECUTAR EL SIGUIENTE CÓDIGO PARA LAS DEPENDENCIAS
-
-```
-maven clean
-maven install
