@@ -44,4 +44,14 @@ public class GlobalExceptionHandler {
         ApiResponse<Object> response = new ApiResponse<>(false, "Error de validación", errores);
         return ResponseEntity.badRequest().body(response);
     }
+    
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+        Map<String, String> errores = new HashMap<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            errores.put(violation.getPropertyPath().toString(), violation.getMessage());
+        }
+        ApiResponse<Object> response = new ApiResponse<>(false, "Error de validación", errores);
+        return ResponseEntity.badRequest().body(response);
+    }
 }

@@ -1,3 +1,10 @@
+/*
+ * @file RecepcionistaServiceImp.java;
+ * @Autor (c)2024 ErickBecerra
+ * @Created 5 mar. 2024,00:04:01
+ */
+
+
 package com.grupouno.hotelnila.services;
 
 import java.util.List;
@@ -15,23 +22,39 @@ import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.repository.RecepcionistaRepository;
 import com.grupouno.hotelnila.repository.ReservaRepository;
 
+// TODO: Auto-generated Javadoc
 /**
- * La clase RecepcionistaServiceImpl implementa los métodos de la interfaz RecepcionistaService
+ * La clase RecepcionistaServiceImpl implementa los métodos de la interfaz RecepcionistaService.
  */
 @Service
 public class RecepcionistaServiceImp implements RecepcionistaService {
 
-	@Autowired
-	private RecepcionistaRepository recepcionistaRep;
-	@Autowired
-	private ReservaRepository reservaRep;
+	 /** El repositorio del recepcionista. */
+    @Autowired
+    private RecepcionistaRepository recepcionistaRep;
+    
+    /** El repositorio de la reserva. */
+    @Autowired
+    private ReservaRepository reservaRep;
 
+	 /**
+     * Listar recepcionistas.
+     *
+     * @return la lista de recepcionistas
+     */
 	@Override
 	@Transactional
 	public List<Recepcionista> listarRecepcionistas() {
 		return recepcionistaRep.findAll();
 	}
 
+	/**
+     * Buscar por id recepcionista.
+     *
+     * @param idRecepcionista el id del recepcionista
+     * @return el recepcionista
+     * @throws EntityNotFoundException si no se encuentra el recepcionista
+     */
 	@Override
 	@Transactional
 	public Recepcionista buscarPorIdRecepcionista(Long idRecepcionista) throws EntityNotFoundException {
@@ -42,6 +65,13 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 		return recepcionista.get();
 	}
 
+	 /**
+     * Crear recepcionista.
+     *
+     * @param recepcionista el recepcionista a crear
+     * @return el recepcionista creado
+     * @throws IllegalOperationException si ocurre una operación ilegal
+     */
 	@Override
 	@Transactional
 	public Recepcionista crearRecepcionista(Recepcionista recepcionista) throws IllegalOperationException {
@@ -52,6 +82,15 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 		return recepcionistaRep.save(recepcionista);
 	}
 
+	 /**
+     * Actualizar recepcionista.
+     *
+     * @param idRecepcionista el id del recepcionista a actualizar
+     * @param recepcionista el recepcionista con los datos actualizados
+     * @return el recepcionista actualizado
+     * @throws EntityNotFoundException si no se encuentra el recepcionista
+     * @throws IllegalOperationException si ocurre una operación ilegal
+     */
 	@Override
 	@Transactional
 	public Recepcionista actualizarRecepcionista(Long idRecepcionista, Recepcionista recepcionista) throws EntityNotFoundException, IllegalOperationException {
@@ -67,6 +106,13 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 		return recepcionistaRep.save(recepcionista);
 	}
 
+	 /**
+     * Eliminar recepcionista.
+     *
+     * @param idRecepcionista el id del recepcionista a eliminar
+     * @throws EntityNotFoundException si no se encuentra el recepcionista
+     * @throws IllegalOperationException si ocurre una operación ilegal
+     */
 	@Override
 	@Transactional
 	public void eliminarRecepcionista(Long idRecepcionista) throws EntityNotFoundException, IllegalOperationException {
@@ -81,6 +127,15 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 	}
 
 
+	/**
+     * Asignar reserva.
+     *
+     * @param idRecepcionista el id del recepcionista
+     * @param idReserva el id de la reserva
+     * @return el recepcionista
+     * @throws EntityNotFoundException si no se encuentra el recepcionista o la reserva
+     * @throws IllegalOperationException si ocurre una operación ilegal
+     */
 	@Override
 	@Transactional
 	public Recepcionista asignarReserva(Long idRecepcionista, Long idReserva) throws EntityNotFoundException, IllegalOperationException {
@@ -98,6 +153,13 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 		return recepcionista;
 	}
 
+	/**
+	 * Obtener reservas.
+	 *
+	 * @param idRecepcionista the id recepcionista
+	 * @return the list
+	 * @throws EntityNotFoundException the entity not found exception
+	 */
 	public List<Reserva> obtenerReservas(Long idRecepcionista) throws EntityNotFoundException {
 		Recepcionista recepcionista = recepcionistaRep.findById(idRecepcionista).orElseThrow(
 				()->new EntityNotFoundException(ErrorMessage.RECEPCIONISTA_NOT_FOUND)
