@@ -9,12 +9,13 @@ package com.grupouno.hotelnila.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.*;
+
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 // TODO: Auto-generated Javadoc
@@ -35,22 +36,27 @@ public class Recepcionista {
 	
 	/** Nombre del recepcionista. */
 	@Size(max = 30)
+	@NotBlank
 	private String nombre;
 	
 	/** Apellido paterno del recepcionista. */
 	@Size(max = 15)
+	@NotBlank
 	private String apePat;
 	
 	/** Apellido materno del recepcionista. */
 	@Size(max = 15)
+	@NotBlank
 	private String apeMat;
 	
 	/** Número de telefono del recpcionista. */
-	@Pattern(regexp = "\\d{9}")
+	@Digits(integer = 9, fraction = 0, message = "valor numérico fuera de límites (se esperaba un número de teléfono 123456789)")
+	@NotBlank(message = "El campo no puede estar vacío")
 	private String telefono;
 	
 	/** Turno de trabajo del recepcionista. */
-	@Pattern(regexp = "^(Mañana|Tarde)$")
+	@NotBlank
+	@Pattern(regexp = "^(Mañana|Tarde)$", message = "Solo existe turno Mañana y Tarde")
 	private String turno;
 
 	/** Lista de reservas echas por el recepcionista. */
