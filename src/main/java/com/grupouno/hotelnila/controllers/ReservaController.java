@@ -79,7 +79,9 @@ public class ReservaController {
      * @throws IllegalOperationException
 	 */
 	@PostMapping
+
     public ResponseEntity<?> crearReserva(@Valid @RequestBody ReservaDTO reservaDTO, BindingResult result) throws IllegalOperationException {
+
 		if(result.hasErrors()) {
 			return validar(result);
 		}
@@ -120,6 +122,7 @@ public class ReservaController {
 	 * @throws EntityNotFoundException 
 	 * @throws IllegalOperationException 
 	 */
+
 	@PutMapping("/asignarCliente/{idReserva}/{idCliente}")
     public ResponseEntity<?> asignarCliente (@PathVariable Long idReserva, @PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
         Reserva reserva = resService.asignarCliente(idReserva, idCliente);

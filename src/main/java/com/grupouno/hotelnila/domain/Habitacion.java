@@ -22,6 +22,7 @@ import java.util.List;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idHabitacion")
 public class Habitacion {
+
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHabitacion;
@@ -33,6 +34,7 @@ public class Habitacion {
     
     private String estado;
     
+
     private Float precio;
 
     @ManyToMany

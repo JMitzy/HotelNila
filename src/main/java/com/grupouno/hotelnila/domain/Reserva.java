@@ -27,7 +27,8 @@ import java.util.List;
 public class Reserva {
     
     /** The id reserva. */
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReserva;
     
@@ -36,7 +37,7 @@ public class Reserva {
     private Date fechaInicio;
     
     /** The fecha fin. */
-    
+
     private Date fechaFin;
 
    /** The reserva habitacion. */

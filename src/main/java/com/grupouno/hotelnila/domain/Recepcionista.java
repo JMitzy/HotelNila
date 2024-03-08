@@ -34,6 +34,7 @@ public class Recepcionista {
 	private Long idRecepcionista;
 	
 	/** Nombre del recepcionista. */
+
 	
 	private String nombre;
 	
@@ -50,7 +51,7 @@ public class Recepcionista {
 	private String telefono;
 	
 	/** Turno de trabajo del recepcionista. */
-	
+
 	private String turno;
 
 	/** Lista de reservas echas por el recepcionista. */

@@ -28,4 +28,5 @@ public class ErrorMessage {
 	public static final String DETALLEHABITACION_NOT_FOUND = "El Recepcionista con el id proporcionado no fue encontrado";
 	
 	public static final String FECHA_INVALID = "La fecha de inicio debe ser anterior a la fecha fin";
+
 }

@@ -19,6 +19,7 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
 import lombok.Data;
 
 // TODO: Auto-generated Javadoc
@@ -29,6 +30,7 @@ import lombok.Data;
 public class RecepcionistaDTO {
 
 	/** El id del recepcionista. */
+
 	
 	private Long idRecepcionista;
 	
@@ -55,6 +57,7 @@ public class RecepcionistaDTO {
 	/** Turno de trabajo del recepcionista. */
 	@NotBlank
 	@Pattern(regexp = "^(Mañana|Tarde)$", message = "Solo existe turno Mañana y Tarde")
+
 	private String turno;
 
 	/** Lista de reservas echas por el recepcionista. */

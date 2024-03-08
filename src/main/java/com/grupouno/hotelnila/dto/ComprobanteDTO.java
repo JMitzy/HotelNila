@@ -7,6 +7,7 @@ package com.grupouno.hotelnila.dto;
 
 import java.sql.Date;
 
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.grupouno.hotelnila.domain.Reserva;
@@ -16,6 +17,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
+import com.grupouno.hotelnila.domain.Reserva;
+
+
 import lombok.Data;
 
 /**
@@ -25,6 +30,7 @@ import lombok.Data;
 public class ComprobanteDTO {
 
 	/** The id comprobante. */
+
 	
 	private Long idComprobante;
 	

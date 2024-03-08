@@ -11,6 +11,7 @@ import java.util.List;
 import com.grupouno.hotelnila.domain.Direccion;
 import com.grupouno.hotelnila.domain.Reserva;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ import lombok.Data;
 public class ClienteDTO {
 	
 	/** Id del cliente. */
+
 	
 	private Long idCliente;
 	

@@ -80,7 +80,6 @@ public class ReservaServiceImp implements ReservaService {
 	@Override
 	@Transactional
 	public Reserva crearReserva(Reserva reserva) throws IllegalOperationException {
-		
 		return resRep.save(reserva);
 	}
 

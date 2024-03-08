@@ -128,7 +128,11 @@ public class RecepcionistaController {
         }
         
         // Validar lógica de negocio
+
         /*if (recepcionistaDTO.getApePat() == null || recepcionistaDTO.getApePat().isEmpty()) {
+
+        if (recepcionistaDTO.getApePat() == null || recepcionistaDTO.getApePat().isEmpty()) {
+
             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'apePat' no puede estar vacío"));
         }
         
@@ -147,6 +151,8 @@ public class RecepcionistaController {
         if (!recepcionistaDTO.getTurno().equals("Mañana") && !recepcionistaDTO.getTurno().equals("Tarde")) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'turno' debe ser 'Mañana' o 'Tarde'"));
         }*/
+
+        
         
         Recepcionista recepcionista = modelMapper.map(recepcionistaDTO, Recepcionista.class);
         recepcionistaService.actualizarRecepcionista(idRecepcionista, recepcionista);
@@ -180,7 +186,7 @@ public class RecepcionistaController {
      * @throws EntityNotFoundException si no se encuentra la entidad
      * @throws IllegalOperationException si la operación es ilegal
      */
-    @PutMapping(value = "asignarReserva/{idRecepcionista}/{idReserva}")
+    @PutMapping("asignarReserva/{idRecepcionista}/{idReserva}")
     public ResponseEntity<?> asignarReserva(@PathVariable Long idRecepcionista, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
         Recepcionista recepcionista = recepcionistaService.asignarReserva(idRecepcionista, idReserva);
         RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
@@ -195,7 +201,7 @@ public class RecepcionistaController {
      * @return la entidad de respuesta
      * @throws EntityNotFoundException si no se encuentra la entidad
      */
-    @GetMapping(value = "/{idRecepcionista}/reservas")
+    @GetMapping("/{idRecepcionista}/reservas")
     public ResponseEntity<?> obtenerReservas(@PathVariable Long idRecepcionista) throws EntityNotFoundException {
         List<Reserva> reservas = recepcionistaService.obtenerReservas(idRecepcionista);
         List<ReservaDTO> reservasDTO = reservas.stream()
@@ -210,7 +216,7 @@ public class RecepcionistaController {
      *
      * @return la entidad de respuesta
      */
-    @RequestMapping(value = "/recepcionistas", method = RequestMethod.OPTIONS)
+    @RequestMapping(path = "/recepcionistas", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> optionsRecepcionistas() {
         return ResponseEntity
                 .ok()

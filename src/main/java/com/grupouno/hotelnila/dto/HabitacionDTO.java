@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
 import lombok.Data;
 
 
@@ -27,6 +28,7 @@ import lombok.Data;
 public class HabitacionDTO {
 	
 	/** The id habitacion. */
+
 	
 	private Long idHabitacion;
     

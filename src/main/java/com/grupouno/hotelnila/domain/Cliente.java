@@ -42,6 +42,7 @@ public class Cliente {
 	private Long idCliente;
 	
 	/** Representa el nombre del cliente. Limitado a un máximo de 30 caracteres */
+
 	
 	private String nombreCli;
 	
@@ -49,20 +50,28 @@ public class Cliente {
     
 	private String apePat;
 	
-	/** Representa el apellido materno del cliente. Limitado a un máximo de 15 caracteres */
 	
+	/** Representa el apellido materno del cliente. Limitado a un máximo de 15 caracteres */
+
 	private String apeMat;
 	
 	/** Representa el DNI del cliente. Limitado a 8 dígitos */
-	
+
 	private String dni;
 	
 	/** Representa el número de teléfono del cliente.Limitado 9 dígitos.*/
 	
+
 	private String telefono;
 	
 	/**  Representa la dirección de correo electrónico del cliente */
 	
+
+	
+	
+	/**  Representa la dirección de correo electrónico del cliente */
+	
+
 	private String email;
 	
 	/** Representa la dirección del cliente.  */

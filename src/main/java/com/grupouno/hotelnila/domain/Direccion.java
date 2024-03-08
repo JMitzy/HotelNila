@@ -32,11 +32,15 @@ public class Direccion {
 	private Long idDireccion;
 	
 	/** Representa el nombre o descripción de la dirección. Limitado a un máximo de 50 caracteres.*/
+
 	
 	private String nombreDirec;
 	
 	/** Representa la ciudad en la que se encuentra la dirección. */
 	
+	
+	/** Representa la ciudad en la que se encuentra la dirección. */
+
 	private String ciudad;
 	
 	/**Representa el cliente asociado a esta dirección. */
