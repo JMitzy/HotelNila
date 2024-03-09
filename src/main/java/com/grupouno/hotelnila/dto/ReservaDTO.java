@@ -13,21 +13,34 @@ import com.grupouno.hotelnila.domain.Comprobante;
 import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.domain.Recepcionista;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+
 import lombok.Data;
 
 /**
  * The Class ReservaDTO.
  */
 @Data
+@ValidarFecha
 public class ReservaDTO {
 	
 	/** The id reserva. */
+	
 	private Long idReserva;
 	
 	/** The fecha inicio. */
+	@Temporal(TemporalType.DATE)
+	@NotNull(message = "La fecha de inicio no puede ser nula")
 	private Date fechaInicio;
 	
 	/** The fecha fin. */
+	@Temporal(TemporalType.DATE)
+    @NotNull(message = "La fecha de fin no puede ser nula")
 	private Date fechaFin;
 	
 	/** The habitaciones. */

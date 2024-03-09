@@ -22,17 +22,19 @@ import java.util.List;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idHabitacion")
 public class Habitacion {
-    @Id
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHabitacion;
     
-    @NotNull(message = "El número de habitación no puede ser nula")
+   
     private String nroHabitacion;
-    @NotBlank(message = "Tipo de habitación no pueden estar en blanco")
+   
     private String tipoHabitacion;
-    @NotBlank(message = "Estado de habitación no pueden estar en blanco")
+    
     private String estado;
-    @NotNull(message = "El precio de habitación no puede ser nula")
+    
+
     private Float precio;
 
     @ManyToMany

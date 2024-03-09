@@ -60,7 +60,11 @@ public class ErrorMessage {
 	
 	/** Mensaje de error para cuando un pedido no es encontrado. */
 	public static final String PEDIDO_NOT_FOUND = "El pedido con el id proporcionado no fue encontrado";
-	
+
 	/** Mensaje de error para cuando un detalle de habitacion no es encontrado. */
 	public static final String DETALLEHABITACION_NOT_FOUND = "El detalle de reserva con el id proporcionado no fue encontrado";
+
+	/** Mensaje de error para fecha invalida . */
+	public static final String FECHA_INVALID = "La fecha de inicio debe ser anterior a la fecha fin";
+
 }

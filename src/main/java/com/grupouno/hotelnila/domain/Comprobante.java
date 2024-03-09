@@ -33,15 +33,23 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idComprobante")
 public class Comprobante {
 	
+
+	/** Id del comprobante */
+
 	/** Id de la factura */
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idComprobante;
 	
 	/** Fecha en la que se crea el comprobante */
+
+	
+
 	@NotNull(message = "La fecha del comprobante no puede ser nula")
     //@Past(message = "La fecha del comprobante debe estar en el pasado")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
+
 	private Date fechaComprobante;
     
 	private String estado;

@@ -42,31 +42,36 @@ public class Cliente {
 	private Long idCliente;
 	
 	/** Representa el nombre del cliente. Limitado a un máximo de 30 caracteres */
-	@Size(max=30)
-	@NotBlank
+
+	
 	private String nombreCli;
 	
 	/** Representa el apellido paterno del cliente. Limitado a un máximo de 15 caracteres */
-    @Size(max=15)
+    
 	private String apePat;
 	
+	
 	/** Representa el apellido materno del cliente. Limitado a un máximo de 15 caracteres */
-	@Size(max=15)
+
 	private String apeMat;
 	
 	/** Representa el DNI del cliente. Limitado a 8 dígitos */
-	
-	@Column(unique=true)
-	@Digits(integer = 8, fraction = 0)
+
 	private String dni;
 	
 	/** Representa el número de teléfono del cliente.Limitado 9 dígitos.*/
 	
-	@Digits(integer =9, fraction = 0)
+
 	private String telefono;
 	
 	/**  Representa la dirección de correo electrónico del cliente */
-	@Email(message = "El formato del email es incorrec")
+	
+
+	
+	
+	/**  Representa la dirección de correo electrónico del cliente */
+	
+
 	private String email;
 	
 	/** Representa la dirección del cliente.  */

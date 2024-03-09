@@ -8,6 +8,11 @@ package com.grupouno.hotelnila.dto;
 import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.domain.Reserva;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 /**
@@ -17,9 +22,12 @@ import lombok.Data;
 public class DetalleReservaDTO {
     
     /** The id detalle reserva. */
+
+	
     private Long idDetalleReserva;
     
     /** The pago reserva. */
+	@NotBlank
     private float pagoReserva;
     
     /** The estado reserva. */

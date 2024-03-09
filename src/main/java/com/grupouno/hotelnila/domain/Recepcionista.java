@@ -34,28 +34,24 @@ public class Recepcionista {
 	private Long idRecepcionista;
 	
 	/** Nombre del recepcionista. */
-	@Size(max = 30)
-	@NotBlank
+
+	
 	private String nombre;
 	
 	/** Apellido paterno del recepcionista. */
-	@Size(max = 15)
-	@NotBlank
+	
 	private String apePat;
 	
 	/** Apellido materno del recepcionista. */
-	@Size(max = 15)
-	@NotBlank
+	
 	private String apeMat;
 	
 	/** Número de telefono del recpcionista. */
-	@Digits(integer = 9, fraction = 0, message = "valor numérico fuera de límites (se esperaba un número de teléfono 123456789)")
-	@NotBlank(message = "El campo no puede estar vacío")
+	
 	private String telefono;
 	
 	/** Turno de trabajo del recepcionista. */
-	@NotBlank
-	@Pattern(regexp = "^(Mañana|Tarde)$", message = "Solo existe turno Mañana y Tarde")
+
 	private String turno;
 
 	/** Lista de reservas echas por el recepcionista. */

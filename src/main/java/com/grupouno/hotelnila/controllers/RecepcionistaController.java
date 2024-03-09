@@ -130,7 +130,11 @@ public class RecepcionistaController {
         }
         
         // Validar lógica de negocio
+
+        /*if (recepcionistaDTO.getApePat() == null || recepcionistaDTO.getApePat().isEmpty()) {
+
         if (recepcionistaDTO.getApePat() == null || recepcionistaDTO.getApePat().isEmpty()) {
+
             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'apePat' no puede estar vacío"));
         }
         
@@ -148,7 +152,9 @@ public class RecepcionistaController {
         
         if (!recepcionistaDTO.getTurno().equals("Mañana") && !recepcionistaDTO.getTurno().equals("Tarde")) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'turno' debe ser 'Mañana' o 'Tarde'"));
-        }
+        }*/
+
+        
         
         Recepcionista recepcionista = modelMapper.map(recepcionistaDTO, Recepcionista.class);
         recepcionistaService.actualizarRecepcionista(idRecepcionista, recepcionista);
@@ -230,7 +236,7 @@ public class RecepcionistaController {
      *
      * @return la entidad de respuesta
      */
-    @RequestMapping(value = "/recepcionistas", method = RequestMethod.OPTIONS)
+    @RequestMapping(path = "/recepcionistas", method = RequestMethod.OPTIONS)
     public ResponseEntity<?> optionsRecepcionistas() {
         return ResponseEntity
                 .ok()

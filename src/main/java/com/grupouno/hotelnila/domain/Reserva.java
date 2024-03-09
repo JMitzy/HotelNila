@@ -27,18 +27,17 @@ import java.util.List;
 public class Reserva {
     
     /** The id reserva. */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReserva;
     
     /** The fecha inicio. */
-    @Temporal(TemporalType.DATE)
-    @NotNull(message = "La fecha de inicio no puede ser nula")
+  
     private Date fechaInicio;
     
     /** The fecha fin. */
-    @Temporal(TemporalType.DATE)
-    @NotNull(message = "La fecha de fin no puede ser nula")
+
     private Date fechaFin;
 
    /** The reserva habitacion. */
