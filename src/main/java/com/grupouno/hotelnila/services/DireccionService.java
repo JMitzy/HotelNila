@@ -12,7 +12,7 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 
 /**
- * The Interface DireccionService.
+ * Interfaz que define las operaciones de servicio relacionadas con las direcciones.
  */
 public interface DireccionService {
 	

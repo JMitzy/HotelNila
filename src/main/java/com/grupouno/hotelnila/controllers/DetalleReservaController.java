@@ -32,26 +32,25 @@ import com.grupouno.hotelnila.util.ApiResponse;
 
 import jakarta.validation.Valid;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DetalleReservaController.
+ * Controlador REST para gestionar operaciones relacionadas con los detalles de las reservas.
  */
 @RestController
 @RequestMapping("/api/detalle-reservas")
 public class DetalleReservaController {
     
-    /** The det res service. */
+  
     @Autowired
     private DetalleReservaService detResService;
 
-    /** The model mapper. */
+   
     @Autowired
     private ModelMapper modelMapper;
 
     /**
-     * Listar detalles reservas.
+     * Listar de detalles de la reserva.
      *
-     * @return the response entity
+     * @return ResponseEntity con la lista de detalles de reserva y un mensaje de exito.
      */
     @GetMapping
     public ResponseEntity<?> listarDetallesReservas(){
@@ -63,27 +62,29 @@ public class DetalleReservaController {
     }
 
     /**
-     * Buscar por id detalle reserva.
+     * Obtiene un detalle de reserva por su id
      *
-     * @param idReservaHabitacion the id reserva habitacion
-     * @return the response entity
-     * @throws EntityNotFoundException the entity not found exception
+     * @param idReservaHabitacion El id del detalle de reserva que se desea obtener
+     * @return  ResponseEntity con el detalle de reserva obtenido y un mensaje de exito,
+     *  o una respuesta de error si no se encuentra el cliente.
+     * @throws EntityNotFoundException Si no se encuentra el detalle de reserva con el ID proporcionado.
      */
     @GetMapping("/{idDetalleReserva}")
-    public ResponseEntity<?> buscarPorIdDetalleReserva(@PathVariable Long idReservaHabitacion) throws EntityNotFoundException {
-        DetalleReserva detalleReservas = detResService.buscarPorIdDetalleReserva(idReservaHabitacion);
+    public ResponseEntity<?> buscarPorIdDetalleReserva(@PathVariable Long idDetalleReserva) throws EntityNotFoundException {
+        DetalleReserva detalleReservas = detResService.buscarPorIdDetalleReserva(idDetalleReserva);
         DetalleReservaDTO detalleReservasDTO = modelMapper.map(detalleReservas, DetalleReservaDTO.class);
         ApiResponse<DetalleReservaDTO> response = new ApiResponse<>(true, "Detalles reservas obtenidas con éxito", detalleReservasDTO);
         return ResponseEntity.ok(response);
     }
 
     /**
-     * Crear detalle reserva.
+     * Crea un nuevo detalle de reserva.
      *
-     * @param detalleReservaDTO the detalle reserva DTO
-     * @param result the result
-     * @return the response entity
-     * @throws IllegalOperationException the illegal operation exception
+     * @param detalleReservaDTO El DTO del detalle de la reserva que se desea crear
+     * @param result El resultado de la validación de entrada.
+     * @return ResponseEntity con el detalle reserva creado y un mensaje de exito, 
+     * o una respuesta de error si hay errores de validacion.
+     * @throws IllegalOperationException Si ocurre un error durante la operacion de creacion del detalle de reserva.
      */
     @PostMapping
     public ResponseEntity<?> crearDetalleReserva (@Valid @RequestBody DetalleReservaDTO detalleReservaDTO, BindingResult result) throws IllegalOperationException {
@@ -101,7 +102,7 @@ public class DetalleReservaController {
      * Actualizar detalle reserva.
      *
      * @param detalleReservaDTO the detalle reserva DTO
-     * @param result the result
+     * @param result El resultado de la validación de entrada.
      * @param idReservaHabitacion the id reserva habitacion
      * @return the response entity
      * @throws EntityNotFoundException the entity not found exception
@@ -128,24 +129,24 @@ public class DetalleReservaController {
      * @throws EntityNotFoundException the entity not found exception
      * @throws IllegalOperationException the illegal operation exception
      */
-    @PutMapping(value = "/reserva/{idReservaHabitacion}/{idReserva}")
-    public ResponseEntity<?> asignarReserva(@PathVariable Long idReservaHabitacion, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
-        DetalleReserva detalleReserva = detResService.asignarReserva(idReservaHabitacion, idReserva);
+    @PutMapping("/reserva/{idDetalleReserva}/{idReserva}")
+    public ResponseEntity<?> asignarReserva(@PathVariable Long idDetalleReserva, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
+        DetalleReserva detalleReserva = detResService.asignarReserva(idDetalleReserva, idReserva);
         DetalleReservaDTO detalleReservaDTO = modelMapper.map(detalleReserva,DetalleReservaDTO.class);
         ApiResponse<DetalleReservaDTO> response = new ApiResponse<>(true, "Detalle reserva asignada con éxito", detalleReservaDTO);
         return ResponseEntity.ok(response);
     }
 
     /**
-     * Asignar habitacion.
+     * Asigna una habitación a un detalle de reserva.
      *
-     * @param idReservaHabitacion the id reserva habitacion
-     * @param idHabitacion the id habitacion
-     * @return the response entity
-     * @throws EntityNotFoundException the entity not found exception
-     * @throws IllegalOperationException the illegal operation exception
+     * @param idReservaHabitacion El ID del detalle de reserva al que se desea asignar la habitacion.
+     * @param idHabitacion        El ID de la habitacion que se desea asignar al detalle de reserva.
+     * @return ResponseEntity con el detalle de reserva actualizado y un mensaje de exito.
+     * @throws EntityNotFoundException    Si no se encuentra el detalle de reserva o la habitacion con los IDs proporcionados.
+     * @throws IllegalOperationException Si ocurre un error durante la operacion de asignacion de la habitacion.
      */
-    @PutMapping(value = "/habitacion/{idReservaHabitacion}/{idHabitacion}")
+    @PutMapping("/habitacion/{idReservaHabitacion}/{idHabitacion}")
     public ResponseEntity<?> asignarHabitacion(@PathVariable Long idReservaHabitacion, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
         DetalleReserva detalleReserva = detResService.asignarHabitacion(idReservaHabitacion, idHabitacion);
         DetalleReservaDTO detalleReservaDTO = modelMapper.map(detalleReserva,DetalleReservaDTO.class);
@@ -154,11 +155,11 @@ public class DetalleReservaController {
     }
     
     /**
-     * Validar.
-     *
-     * @param result the result
-     * @return the response entity
-     */
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
+	 *
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
+	 */
     private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

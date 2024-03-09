@@ -34,7 +34,7 @@ import jakarta.validation.Valid;
 
 
 /**
- * La clase DireccionController proporciona endpoints para operaciones relacionadas con direcciones.
+ * Controlador REST para gestionar operaciones relacionadas con las direcciones.
  */
 @RestController
 @RequestMapping("/api/direcciones")
@@ -43,7 +43,7 @@ public class DireccionController {
 	@Autowired
     private DireccionService direcService;
 
-    /** ModelMapper para mapeo de DTOs.  */
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -63,11 +63,11 @@ public class DireccionController {
 	
 	
 	/**
-	  * Obtiene una dirección por su ID.
-     *
-     * @param ID de la dirección a buscar
-     * @return ResponseEntity con la direccion encontrada y un mensaje de éxito
-     * @throws EntityNotFoundException
+	 * Obtiene una dirección por su ID.
+	 *
+	 * @param idDireccion El id de la direccion que se desea obtener
+	 * @return ResponseEntity con la direccion encontrada y un mensaje de éxito, o una respuesta de error si no se encuentra la direccion.
+	 * @throws EntityNotFoundException Si no se encuentra la direccion con el ID proporcionado.
 	 */
 	@GetMapping("/{idDireccion}")
     public ResponseEntity<?> listarPorID(@PathVariable Long idDireccion) throws EntityNotFoundException {
@@ -79,10 +79,11 @@ public class DireccionController {
 	
 	/**
 	 * Crea una nueva dirección.
-     *
-     * @param DTO de la dirección a crear
-     * @return ResponseEntity con la dirección creada y un mensaje de éxito
-     * @throws IllegalOperationException
+	 *
+	 * @param direccionDTO El DTO de la dirección que se desea crear
+	 * @param result El resultado de la validación de entrada
+	 * @return ResponseEntity con la dirección creada y un mensaje de éxito
+	 * @throws IllegalOperationException the illegal operation exception Si ocurre un error durante la operación de creación de la dirección.
 	 */
 	@PostMapping
     public ResponseEntity<?> crearDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result) throws IllegalOperationException {
@@ -97,13 +98,15 @@ public class DireccionController {
     }
 	
 	/**
-	 * Actualizar direccion.
+	 * Actualiza una direccion existente.
 	 *
-	 * @param id de la dirección
-	 * @param Información actualizada de la dirección
-	 * @return Dirección actualizada
-	 * @throws EntityNotFoundException 
-	 * @throws IllegalOperationException 
+	 * @param direccionDTO El DTO de la direccion con los nuevos datos
+	 * @param result the result
+	 * @param idDireccion El ID de la direccion que se desea actualizar.
+	 * @return ResponseEntity con la direccion actualizada y un mensaje de éxito, 
+	 * o una respuesta de error si hay errores de validacion.
+	 * @throws EntityNotFoundException Si no se encuentra la direccion con el ID proporcionado.
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de actualizacion de la direccion.
 	 */
 	@PutMapping("/{idDireccion}")
     public ResponseEntity<?> actualizarDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
@@ -115,12 +118,12 @@ public class DireccionController {
     } 
 	
 	/**
-	   * Elimina una direccion por su ID.
-     *
-     * @param  ID de la dirección a eliminar
-     * @return ResponseEntity con un mensaje de éxito
-     * @throws EntityNotFoundException 
-     * @throws IllegalOperationException 
+	 * Elimina una direccion existente.
+	 *
+	 * @param idDireccion El id de la direccion que se desea eliminar. 
+	 * @return ResponseEntity con un mensaje de exito despues de eliminar la direccion.
+	 * @throws EntityNotFoundException si no se encuentra la direccion con el id proporcionado
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de eliminacion de la direccion.
 	 */
 	@DeleteMapping("/{idDireccion}")
     public ResponseEntity<?> eliminarDireccion(@PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
@@ -128,7 +131,12 @@ public class DireccionController {
         ApiResponse<String> response = new ApiResponse<>(true, "Direccion eliminada con éxito", null);
         return ResponseEntity.ok(response);
     }
-	
+	/**
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
+	 *
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
+	 */
 	 private ResponseEntity<Map<String, String>> validar(BindingResult result) {
 	        Map<String, String> errores = new HashMap<>();
 	        result.getFieldErrors().forEach(err -> {

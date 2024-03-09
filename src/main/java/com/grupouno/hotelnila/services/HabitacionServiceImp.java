@@ -22,12 +22,12 @@ import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.repository.HabitacionRepository;
 
 /**
- * The Class HabitacionServiceImp.
+ * Implementacion del servicio para operaciones relacionadas con las habitaciones
  */
 @Service
 public class HabitacionServiceImp implements HabitacionService {
 
-	/** The habi rep. */
+
 	@Autowired
 	private HabitacionRepository habiRep;
 	

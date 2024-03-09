@@ -25,20 +25,20 @@ import jakarta.transaction.Transactional;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class DetalleReservaServiceImpl.
+ * Implementacion del servicio para operaciones relacionadas con los detalles de reserva.
  */
 @Service
 public class DetalleReservaServiceImpl implements DetalleReservaService{
     
-    /** The det res rep. */
+    
     @Autowired
     private DetalleReservaRepository detResRep;
 
-    /** The rsrv rep. */
+    
     @Autowired
     private ReservaRepository rsrvRep;
 
-    /** The hab rep. */
+  
     @Autowired
     private HabitacionRepository habRep;
 

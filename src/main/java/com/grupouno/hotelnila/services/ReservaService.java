@@ -6,12 +6,14 @@
 package com.grupouno.hotelnila.services;
 
 import java.util.List;
+
+import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.domain.Reserva;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 
 /**
- * The Interface ReservaService.
+ * Interfaz que define las operaciones de servicio relacionadas con las reservas.
  */
 public interface ReservaService {
 	
@@ -61,5 +63,9 @@ public interface ReservaService {
      * @throws IllegalOperationException the illegal operation exception
      */
     Reserva asignarCliente(Long idReserva, Long idCliente) throws EntityNotFoundException, IllegalOperationException;
+    
+    List<Habitacion> obtenerHabitaciones(Long idReserva) throws EntityNotFoundException,IllegalOperationException;
+    
+    Habitacion obtenerHabitacionPorId (Long idReserva, Long idHabitacion) throws EntityNotFoundException,IllegalOperationException;
     
 }

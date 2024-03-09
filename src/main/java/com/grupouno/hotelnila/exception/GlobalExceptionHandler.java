@@ -1,3 +1,8 @@
+/*
+ * @file GlobalExceptionHandler.java;
+ * @Autor (c)2024 JhenniferMendoza
+ * @Created 8 mar. 2024,17:50:55
+ */
 package com.grupouno.hotelnila.exception;
 
 import java.util.HashMap;
@@ -14,20 +19,46 @@ import com.grupouno.hotelnila.util.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * Clase que maneja las excepciones globales en la aplicación.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     
+    /**
+      * Maneja las excepciones de IllegalOperationException.
+     *
+     * @param ex La excepción de IllegalOperationException.
+     * @return ResponseEntity con un mensaje de error y un código de estado HTTP 400.
+     */
     @ExceptionHandler(IllegalOperationException.class)
     public ResponseEntity<Object> handleIllegalOperationException(IllegalOperationException ex) {
         ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+    
+    /**
+     * Maneja las excepciones generales de Exception.
+     *
+     * @param ex    La excepción de Exception.
+     * @param request La solicitud web donde ocurrió la excepción.
+     * @return ResponseEntity con un mensaje de error y un código de estado HTTP 500.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> globalExceptionHandler(Exception ex, WebRequest request){
     	ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+    
+    /**
+     * Maneja las excepciones de EntityNotFoundException.
+     *
+     * @param ex      La excepción de EntityNotFoundException.
+     * @param request La solicitud web donde ocurrió la excepción.
+     * @return ResponseEntity con un mensaje de error y un código de estado HTTP 404.
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> resourceNotFoundException(EntityNotFoundException ex, WebRequest request){
     	ApiResponse<Object> response = new ApiResponse<>(false, ex.getMessage(), null);
@@ -35,6 +66,12 @@ public class GlobalExceptionHandler {
     }
    
 
+    /**
+     * Maneja las excepciones de ConstraintViolationException.
+     *
+     * @param ex La excepción de ConstraintViolationException.
+     * @return ResponseEntity con un mensaje de error de validación y un código de estado HTTP 400.
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         Map<String, String> errores = new HashMap<>();

@@ -23,7 +23,7 @@ import jakarta.transaction.Transactional;
 
 
 /**
- * The Class FacturaServiceImp.
+ * Implementacion del servicio para operaciones relacionadas con los comprobantes.
  */
 @Service
 public class ComprobanteServiceImp implements ComprobanteService {

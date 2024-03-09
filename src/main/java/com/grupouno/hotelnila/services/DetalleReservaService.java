@@ -13,7 +13,7 @@ import com.grupouno.hotelnila.exception.IllegalOperationException;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface DetalleReservaService.
+ * Interfaz que define las operaciones de servicio relacionadas con los detalles de reserva.
  */
 public interface DetalleReservaService {
 	

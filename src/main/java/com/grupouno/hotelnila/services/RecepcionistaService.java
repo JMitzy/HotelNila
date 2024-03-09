@@ -15,7 +15,7 @@ import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 
 /**
- * La interfaz RecepcionistaService proporciona métodos para interactuar con la entidad Recepcionista
+ * Interfaz que define las operaciones de servicio relacionadas con los recepcionistas.
  */
 public interface RecepcionistaService {
 
@@ -83,4 +83,5 @@ public interface RecepcionistaService {
      * @throws EntityNotFoundException 
      */
     List<Reserva> obtenerReservas(Long idRecepcionista) throws EntityNotFoundException;
+    Reserva obtenerReservaPorId(Long idRecepcionista,Long idReserva) throws EntityNotFoundException,IllegalOperationException;
 }

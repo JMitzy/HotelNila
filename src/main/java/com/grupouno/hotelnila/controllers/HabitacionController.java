@@ -1,3 +1,8 @@
+/*
+ * @file HabitacionController.java;
+ * @Autor (c)2024 JhenniferMendoza
+ * @Created 8 mar. 2024,17:38:35
+ */
 package com.grupouno.hotelnila.controllers;
 
 import java.util.HashMap;
@@ -26,20 +31,25 @@ import com.grupouno.hotelnila.util.ApiResponse;
 
 import jakarta.validation.Valid;
 
+
+/**
+ * Controlador REST para gestionar operaciones relacionadas con las habitaciones.
+ */
 @RestController
 @RequestMapping("/api/habitaciones")
 public class HabitacionController {
+	
 	@Autowired
     private HabitacionService habiService;
 
-    /** ModelMapper para mapeo de DTOs. */
+ 
     @Autowired
     private ModelMapper modelMapper;
 
 	/**
 	 * Obtiene una lista de todas las habitaciones.
      *
-     * @return ResponseEntity con la lista de habitaciones y un mensaje de éxito
+     * @return ResponseEntity con la lista de habitaciones y un mensaje de exito
 	 */   
 	@GetMapping
     public ResponseEntity<?> listarHabitaciones(){
@@ -52,11 +62,11 @@ public class HabitacionController {
 	
 	
 	/**
-	* Obtiene una habitacion por su ID.
-     *
-     * @param ID de la habitacion a buscar
-     * @return ResponseEntity con la habitación encontrada y un mensaje de éxito
-     * @throws EntityNotFoundException
+	 * Obtiene una habitacion por su ID.
+	 *
+	 * @param idHabitacion El Id de la habitacion que se desea obtener.
+	 * @return ResponseEntity con la habitación obtenida y un mensaje de exito, o una respuesta de error si no se encuentra la habitacion.
+	 * @throws EntityNotFoundException Si no se encuentra la habitacion con el ID proporcionado.
 	 */
 	@GetMapping("/{idHabitacion}")
     public ResponseEntity<?> listarPorID(@PathVariable Long idHabitacion) throws EntityNotFoundException {
@@ -68,10 +78,11 @@ public class HabitacionController {
 	
 	/**
 	 * Crea una nueva habitación.
-     *
-     * @param  DTO de la habitación a crear
-     * @return ResponseEntity con la habitación creada y un mensaje de éxito
-     * @throws IllegalOperationException
+	 *
+	 * @param habitacionDTO El DTO de la habitacion que se desea crear
+	 * @param result El resultado de la validacion de entrada
+	 * @return ResponseEntity con la habitación creada y un mensaje de exito, o una respuesta de error si hay errores de validacion.
+	 * @throws IllegalOperationException Si ocurre un error durante la operación de creación de la habitacion
 	 */
 	@PostMapping
     public ResponseEntity<?> crearHabitacion(@RequestBody HabitacionDTO habitacionDTO, BindingResult result) throws IllegalOperationException {
@@ -88,11 +99,12 @@ public class HabitacionController {
 	/**
 	 * Actualizar habitacion.
 	 *
-	 * @param id de la habitacion
-	 * @param  Información actualizada de la habitacion
-     * @return La habitación actualizada
-     * @throws EntityNotFoundException 
-     * @throws IllegalOperationException
+	 * @param habitacionDTO the habitacion DTO
+	 * @param result the result
+	 * @param idHabitacion the id habitacion
+	 * @return La habitación actualizada
+	 * @throws EntityNotFoundException the entity not found exception
+	 * @throws IllegalOperationException the illegal operation exception
 	 */
 	@PutMapping("/{idHabitacion}")
     public ResponseEntity<?> actualizarHabitacion(@Valid @RequestBody HabitacionDTO habitacionDTO, BindingResult result, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
@@ -105,6 +117,13 @@ public class HabitacionController {
         ApiResponse<HabitacionDTO> response = new ApiResponse<>(true, "Habitación actualizada con con éxito",updatedHabitacionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     } 
+	
+	/**
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
+	 *
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
+	 */
 	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
         result.getFieldErrors().forEach(err -> {
