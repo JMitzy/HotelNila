@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.DetalleReserva;
+
 import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.DetalleReservaDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -61,6 +65,7 @@ public class DetalleReservaController {
         List<DetalleReserva> detalleReservas = detResService.listarDetallesReservas();
         List<DetalleReservaDTO> detalleReservasDTOs = detalleReservas.stream().map(detallereservas->modelMapper.map(detallereservas, DetalleReservaDTO.class))
                 .collect(Collectors.toList());
+
         
      // Crear enlace al recurso de la colección de clientes
         WebMvcLinkBuilder linkToDetalleReservas = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarDetallesReservas());
@@ -97,6 +102,7 @@ public class DetalleReservaController {
 	    }
 	    
         return ResponseEntity.ok(resource);
+
     }
 
     /**

@@ -9,7 +9,9 @@ package com.grupouno.hotelnila.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.springframework.hateoas.RepresentationModel;
+
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -26,6 +28,7 @@ import lombok.Data;
 @Entity
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idRecepcionista")
+
 public class Recepcionista extends RepresentationModel<Recepcionista>{
 
 	/** El id del recepcionista. */

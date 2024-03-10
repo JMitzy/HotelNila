@@ -7,7 +7,9 @@ package com.grupouno.hotelnila.domain;
 
 import java.util.Date;
 
+
 import org.springframework.hateoas.RepresentationModel;
+
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -26,6 +28,7 @@ import lombok.Data;
 @Entity
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idDetalleReserva")
+
 public class DetalleReserva extends RepresentationModel<DetalleReserva> {
 	
 	/** The id detalle reserva. */

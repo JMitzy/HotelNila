@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -28,7 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.domain.Reserva;
+
 import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.HabitacionDTO;
 import com.grupouno.hotelnila.dto.ReservaDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
@@ -62,6 +66,7 @@ public class ReservaController {
         List<Reserva> reservas = resService.listarReservas();
         List<ReservaDTO> reservaDTOs = reservas.stream().map(reserva->modelMapper.map(reserva, ReservaDTO.class))
                 .collect(Collectors.toList());
+
         
      // Crear enlace al recurso de la colección de clientes
         WebMvcLinkBuilder linkToReservas = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarReservas());
@@ -72,7 +77,6 @@ public class ReservaController {
         		reservaCollectionModel);
         return ResponseEntity.ok(response);
 	}
-	
 	
 	/**
 	* Obtiene una reserva por su ID.
@@ -85,6 +89,7 @@ public class ReservaController {
     public ResponseEntity<?> listarPorID(@PathVariable Long idReserva) throws EntityNotFoundException {
 		Reserva reservas = resService.buscarPorIdReserva(idReserva);
 		ReservaDTO reservaDTO = modelMapper.map(reservas, ReservaDTO.class);
+
         
 		// Crear enlace al recurso cliente
 	    EntityModel<ReservaDTO> resource = EntityModel.of(reservaDTO);
@@ -100,7 +105,7 @@ public class ReservaController {
 
 	    return ResponseEntity.ok(resource);
 	}
-	
+
 	/**
 	 * Crea una nueva reserva.
 	 *

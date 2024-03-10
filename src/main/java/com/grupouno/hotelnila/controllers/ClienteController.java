@@ -11,9 +11,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -60,6 +62,7 @@ public class ClienteController {
 	 */
 	@GetMapping
 	public ResponseEntity<?> listarClientes() {
+
         List<Cliente> clientes = clienteService.listarClientes();
         List<ClienteDTO> clienteDTOs = clientes.stream().map(cliente -> modelMapper.map(cliente, ClienteDTO.class))
                 .collect(Collectors.toList());
@@ -72,6 +75,7 @@ public class ClienteController {
         ApiResponse<CollectionModel<ClienteDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito",
                 clienteCollectionModel);
         return ResponseEntity.ok(response);
+
 	}
 
 	/**
@@ -83,6 +87,7 @@ public class ClienteController {
 	 */
 	@GetMapping("/{idCliente}")
 	public ResponseEntity<?> listarPorID(@PathVariable Long idCliente) throws EntityNotFoundException {
+
 	    Cliente cliente = clienteService.buscarPorIdCliente(idCliente);
 	    ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);
 	    

@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupouno.hotelnila.domain.Direccion;
+
 import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.DireccionDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -61,6 +65,7 @@ public class DireccionController {
         List<Direccion> direcciones = direcService.listarDirecciones();
         List<DireccionDTO> direcDTOs = direcciones.stream().map(direccion->modelMapper.map(direccion, DireccionDTO.class))
                 .collect(Collectors.toList());
+
         
      // Crear enlace al recurso de la colección de clientes
         WebMvcLinkBuilder linkToDirecciones = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarDirecciones());
@@ -69,6 +74,7 @@ public class DireccionController {
         
         ApiResponse<CollectionModel<DireccionDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito",
         		direccionCollectionModel);
+
         return ResponseEntity.ok(response);
     }
 	
@@ -84,6 +90,7 @@ public class DireccionController {
     public ResponseEntity<?> listarPorID(@PathVariable Long idDireccion) throws EntityNotFoundException {
         Direccion direcciones = direcService.buscarPorIdDireccion(idDireccion);
         DireccionDTO direccionDTO = modelMapper.map(direcciones, DireccionDTO.class);
+
      
         // Crear enlace al recurso cliente
 	    EntityModel<DireccionDTO> resource = EntityModel.of(direccionDTO);

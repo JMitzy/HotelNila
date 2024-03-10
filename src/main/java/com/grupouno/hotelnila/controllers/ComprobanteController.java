@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.Comprobante;
-import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.ComprobanteDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -62,6 +63,7 @@ public class ComprobanteController {
         List<Comprobante> comprobantes = comprobanteService.listarComprobantes();
         List<ComprobanteDTO> comprobanteDTOs = comprobantes.stream().map(comprobante->modelMapper.map(comprobante, ComprobanteDTO.class))
                 .collect(Collectors.toList());
+
         
         // Crear enlace al recurso de la colección de clientes
         WebMvcLinkBuilder linkToComprobantes = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarComprobantes());
@@ -84,6 +86,7 @@ public class ComprobanteController {
 	public ResponseEntity<?> listarPorID(@PathVariable Long idComprobante) throws EntityNotFoundException {
         Comprobante comprobantes = comprobanteService.buscarPorIdComprobante(idComprobante);
         ComprobanteDTO comprobanteDTO = modelMapper.map(comprobantes, ComprobanteDTO.class);
+
         
      // Crear enlace al recurso cliente
 	    EntityModel<ComprobanteDTO> resource = EntityModel.of(comprobanteDTO);
@@ -99,6 +102,7 @@ public class ComprobanteController {
 
 	    return ResponseEntity.ok(resource);
 	}
+
 	
 	/**
 	 * Crear un nuevo comprobante.

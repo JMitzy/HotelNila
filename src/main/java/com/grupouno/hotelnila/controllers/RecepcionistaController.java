@@ -17,9 +17,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.Recepcionista;
 import com.grupouno.hotelnila.domain.Reserva;
+
 import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.RecepcionistaDTO;
 import com.grupouno.hotelnila.dto.ReservaDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
@@ -73,6 +77,7 @@ public class RecepcionistaController {
         List<Recepcionista> recepcionistas = recepcionistaService.listarRecepcionistas();
         List<RecepcionistaDTO> recepcionistaDTOs = recepcionistas.stream().map(recepcionista -> modelMapper.map(recepcionista, RecepcionistaDTO.class))
                 .collect(Collectors.toList());
+
         
         // Crear enlace al recurso de la colección de clientes
         WebMvcLinkBuilder linkToHabitaciones = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarRecepcionistas());
@@ -95,6 +100,7 @@ public class RecepcionistaController {
     public ResponseEntity<?> listarPorID(@PathVariable Long idRecepcionista) throws EntityNotFoundException {
         Recepcionista recepcionista = recepcionistaService.buscarPorIdRecepcionista(idRecepcionista);
         RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
+
         
      // Crear enlace al recurso cliente
 	    EntityModel<RecepcionistaDTO> resource = EntityModel.of(recepcionistaDTO);

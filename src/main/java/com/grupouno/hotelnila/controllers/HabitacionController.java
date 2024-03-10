@@ -12,9 +12,11 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupouno.hotelnila.domain.Habitacion;
+
 import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.HabitacionDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -60,6 +64,7 @@ public class HabitacionController {
         List<Habitacion> habitaciones = habiService.listarHabitaciones();
         List<HabitacionDTO> habitacionDTOs = habitaciones.stream().map(habitacion->modelMapper.map(habitacion, HabitacionDTO.class))
                 .collect(Collectors.toList());
+
        
      // Crear enlace al recurso de la colección de clientes
         WebMvcLinkBuilder linkToHabitaciones = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarHabitaciones());
@@ -68,6 +73,7 @@ public class HabitacionController {
         
         ApiResponse<CollectionModel<HabitacionDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito",
         		habitacionCollectionModel);
+
         return ResponseEntity.ok(response);
     }
 	
@@ -83,7 +89,7 @@ public class HabitacionController {
     public ResponseEntity<?> listarPorID(@PathVariable Long idHabitacion) throws EntityNotFoundException {
 		Habitacion habitaciones = habiService.buscarPorIdHabitacion(idHabitacion);
 		HabitacionDTO habitacionDTO = modelMapper.map(habitaciones, HabitacionDTO.class);
-		
+
 		// Crear enlace al recurso cliente
 	    EntityModel<HabitacionDTO> resource = EntityModel.of(habitacionDTO);
 	    WebMvcLinkBuilder linkToHabitacion = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarPorID(idHabitacion));
@@ -98,7 +104,7 @@ public class HabitacionController {
 
 	    return ResponseEntity.ok(resource);
 	}
-	
+
 	/**
 	 * Crea una nueva habitación.
 	 *
