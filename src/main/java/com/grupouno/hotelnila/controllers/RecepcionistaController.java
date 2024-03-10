@@ -17,6 +17,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +39,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.Recepcionista;
 import com.grupouno.hotelnila.domain.Reserva;
+
+import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.RecepcionistaDTO;
 import com.grupouno.hotelnila.dto.ReservaDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
@@ -43,19 +51,19 @@ import com.grupouno.hotelnila.util.ApiResponse;
 
 import jakarta.validation.Valid;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * La clase RecepcionistaController proporciona endpoints para operaciones relacionadas con recepcionistas.
+ * Controlador REST para gestionar operaciones relacionadas con los recepcionistas.
  */
 @RestController
 @RequestMapping("/api/recepcionistas")
 public class RecepcionistaController {
 	
-	/** El servicio de recepcionista. */
+	
 	@Autowired
 	private RecepcionistaService recepcionistaService;
 
-	/** El mapeador de modelos. */
+	
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -69,7 +77,15 @@ public class RecepcionistaController {
         List<Recepcionista> recepcionistas = recepcionistaService.listarRecepcionistas();
         List<RecepcionistaDTO> recepcionistaDTOs = recepcionistas.stream().map(recepcionista -> modelMapper.map(recepcionista, RecepcionistaDTO.class))
                 .collect(Collectors.toList());
-        ApiResponse<List<RecepcionistaDTO>> response = new ApiResponse<>(true, "Lista de recepcionistas obtenida con éxito", recepcionistaDTOs);
+
+        
+        // Crear enlace al recurso de la colección de clientes
+        WebMvcLinkBuilder linkToHabitaciones = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarRecepcionistas());
+        CollectionModel<RecepcionistaDTO> recepcionistaCollectionModel = CollectionModel.of(recepcionistaDTOs);
+        recepcionistaCollectionModel.add(linkToHabitaciones.withSelfRel());
+        
+        ApiResponse<CollectionModel<RecepcionistaDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito",
+        		recepcionistaCollectionModel);
         return ResponseEntity.ok(response);
     }
 
@@ -77,23 +93,37 @@ public class RecepcionistaController {
      * Obtiene un recepcionista por su ID.
      *
      * @param idRecepcionista el ID del recepcionista a buscar
-     * @return ResponseEntity con el recepcionista encontrado y un mensaje de éxito
+     * @return ResponseEntity con el recepcionista encontrado y un mensaje de exito
      * @throws EntityNotFoundException si no se encuentra la entidad
      */
     @GetMapping(value = "/{idRecepcionista}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idRecepcionista) throws EntityNotFoundException {
         Recepcionista recepcionista = recepcionistaService.buscarPorIdRecepcionista(idRecepcionista);
         RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
-        ApiResponse<RecepcionistaDTO> response = new ApiResponse<>(true, "Recepcionista obtenido con éxito", recepcionistaDTO);
-        return ResponseEntity.ok(response);
-    }
+
+        
+     // Crear enlace al recurso cliente
+	    EntityModel<RecepcionistaDTO> resource = EntityModel.of(recepcionistaDTO);
+	    WebMvcLinkBuilder linkToRecepcionista = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarPorID(idRecepcionista));
+	    resource.add(linkToRecepcionista.withSelfRel());
+
+	    // Agregar mensajes para verificar la generación del enlace
+	    if (resource.hasLinks()) {
+	        System.out.println("Enlace generado correctamente para el cliente con ID: " + idRecepcionista);
+	    } else {
+	        System.out.println("Error al generar el enlace para el cliente con ID: " + idRecepcionista);
+	    }
+
+	    return ResponseEntity.ok(resource);
+	}
 
     /**
      * Crea un nuevo recepcionista.
      *
      * @param recepcionistaDTO el DTO del recepcionista a crear
-     * @param result el resultado
-     * @return ResponseEntity con el recepcionista creado y un mensaje de éxito
+     * @param result El resultado de la validación de entrada.
+     * @return ResponseEntity con el recepcionista creado y un mensaje de exito,
+     * o una respuesta de error si hay errores de validacion.
      * @throws IllegalOperationException si la operación es ilegal
      */
     @PostMapping(headers = "X-API-VERSION=1.0.0")
@@ -116,9 +146,10 @@ public class RecepcionistaController {
      * @param recepcionistaDTO el DTO del recepcionista
      * @param result el resultado
      * @param idRecepcionista el ID del recepcionista
-     * @return ResponseEntity con el recepcionista actualizado y un mensaje de éxito
-     * @throws IllegalOperationException si la operación es ilegal
-     * @throws EntityNotFoundException si no se encuentra la entidad
+     * @return ResponseEntity con el recepcionista actualizado y un mensaje de éxito,
+     * o una respuesta de error si hay errores de validacion.
+     * @throws IllegalOperationException  Si ocurre un error durante la operación de actualizacion del recepcionista.
+     * @throws EntityNotFoundException  Si no se encuentra el recepcionista con el ID proporcionado.
      */
     @PutMapping(value="/{idRecepcionista}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarRecepcionista(@Valid @RequestBody RecepcionistaDTO recepcionistaDTO, BindingResult result, @PathVariable Long idRecepcionista) throws IllegalOperationException, EntityNotFoundException {
@@ -139,9 +170,9 @@ public class RecepcionistaController {
      * Elimina un recepcionista por su ID.
      *
      * @param idRecepcionista el ID del recepcionista a eliminar
-     * @return ResponseEntity con un mensaje de éxito
-     * @throws EntityNotFoundException si no se encuentra la entidad
-     * @throws IllegalOperationException si la operación es ilegal
+     * @return ResponseEntity con un mensaje de exito
+     * @throws EntityNotFoundException Si no se encuentra el recepcionista con el ID proporcionado.
+     * @throws IllegalOperationException Si ocurre un error durante la operacion de eliminacion del recepcionista.
      */
     @DeleteMapping(value = "/{idRecepcionista}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> eliminarRecepcionista(@PathVariable Long idRecepcionista) throws EntityNotFoundException, IllegalOperationException {
@@ -151,7 +182,7 @@ public class RecepcionistaController {
     }
 
     /**
-     * Asignar reserva a un recepcionista.
+     * Asigna reserva a un recepcionista.
      *
      * @param idRecepcionista el ID del recepcionista
      * @param idReserva el ID de la reserva
@@ -168,7 +199,7 @@ public class RecepcionistaController {
     }
     
     /**
-     * Obtener reservas.
+     * Obtiene reservas de un recepcionista.
      *
      * @param idRecepcionista el ID del recepcionista
      * @return la entidad de respuesta
@@ -182,6 +213,24 @@ public class RecepcionistaController {
             .collect(Collectors.toList());
         ApiResponse<List<ReservaDTO>> response = new ApiResponse<>(true, "Reservas obtenidas con éxito", reservasDTO);
         return ResponseEntity.ok(response);
+    }
+    
+    /**
+     * Obtiene una reserva por su ID para un recepcionista específico.
+     *
+     * @param idRecepcionista El ID del recepcionista.
+     * @param idReserva       El ID de la reserva que se desea obtener.
+     * @return ResponseEntity con la reserva obtenida y un mensaje de éxito.
+     * @throws EntityNotFoundException    Si no se encuentra el recepcionista o la reserva con los IDs proporcionados.
+     * @throws IllegalOperationException Si ocurre un error durante la operación de obtención de la reserva.
+     */
+    @GetMapping("/{idRecepcionista}/reservas/{idReserva}")
+    public ResponseEntity<?> obtenerReservasPorId(@PathVariable Long idRecepcionista,@PathVariable Long idReserva) 
+    		throws EntityNotFoundException, IllegalOperationException {
+    	Reserva reserva = recepcionistaService.obtenerReservaPorId(idRecepcionista, idReserva);
+		ReservaDTO reservaDTO = modelMapper.map(reserva, ReservaDTO.class);
+		ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Reserva obtenida con éxito", reservaDTO);
+		return ResponseEntity.ok(response);
     }
 
     /**
@@ -206,11 +255,11 @@ public class RecepcionistaController {
     }
     
     /**
-     * Validar.
-     *
-     * @param result el resultado
-     * @return la entidad de respuesta
-     */
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
+	 *
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
+	 */
     private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

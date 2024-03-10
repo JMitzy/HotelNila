@@ -17,6 +17,10 @@ import java.util.Date;
 import java.util.List;
 
 
+import org.springframework.hateoas.RepresentationModel;
+
+
+
 
 /**
  * The Class Reserva.
@@ -24,8 +28,9 @@ import java.util.List;
 @Entity
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idReserva")
-public class Reserva {
-    
+
+public class Reserva extends RepresentationModel<Reserva>{
+
     /** The id reserva. */
 
     @Id

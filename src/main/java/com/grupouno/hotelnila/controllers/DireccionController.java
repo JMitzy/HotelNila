@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,6 +29,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.grupouno.hotelnila.domain.Direccion;
+
+import com.grupouno.hotelnila.dto.ClienteDTO;
+
 import com.grupouno.hotelnila.dto.DireccionDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -34,7 +42,7 @@ import jakarta.validation.Valid;
 
 
 /**
- * La clase DireccionController proporciona endpoints para operaciones relacionadas con direcciones.
+ * Controlador REST para gestionar operaciones relacionadas con las direcciones.
  */
 @RestController
 @RequestMapping("/api/direcciones")
@@ -43,7 +51,7 @@ public class DireccionController {
 	@Autowired
     private DireccionService direcService;
 
-    /** ModelMapper para mapeo de DTOs.  */
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -57,32 +65,55 @@ public class DireccionController {
         List<Direccion> direcciones = direcService.listarDirecciones();
         List<DireccionDTO> direcDTOs = direcciones.stream().map(direccion->modelMapper.map(direccion, DireccionDTO.class))
                 .collect(Collectors.toList());
-        ApiResponse<List<DireccionDTO>> response = new ApiResponse<>(true, "Lista de direcciones obtenida con éxito", direcDTOs);
+
+        
+     // Crear enlace al recurso de la colección de clientes
+        WebMvcLinkBuilder linkToDirecciones = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarDirecciones());
+        CollectionModel<DireccionDTO> direccionCollectionModel = CollectionModel.of(direcDTOs);
+        direccionCollectionModel.add(linkToDirecciones.withSelfRel());
+        
+        ApiResponse<CollectionModel<DireccionDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito",
+        		direccionCollectionModel);
+
         return ResponseEntity.ok(response);
     }
 	
 	
 	/**
-	  * Obtiene una dirección por su ID.
-     *
-     * @param ID de la dirección a buscar
-     * @return ResponseEntity con la direccion encontrada y un mensaje de éxito
-     * @throws EntityNotFoundException
+	 * Obtiene una dirección por su ID.
+	 *
+	 * @param idDireccion El id de la direccion que se desea obtener
+	 * @return ResponseEntity con la direccion encontrada y un mensaje de éxito, o una respuesta de error si no se encuentra la direccion.
+	 * @throws EntityNotFoundException Si no se encuentra la direccion con el ID proporcionado.
 	 */
 	@GetMapping(value = "/{idDireccion}",  headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idDireccion) throws EntityNotFoundException {
         Direccion direcciones = direcService.buscarPorIdDireccion(idDireccion);
         DireccionDTO direccionDTO = modelMapper.map(direcciones, DireccionDTO.class);
-        ApiResponse<DireccionDTO> response = new ApiResponse<>(true, "Dirección obtenida con éxito", direccionDTO);
-        return ResponseEntity.ok(response);
-    }
+
+     
+        // Crear enlace al recurso cliente
+	    EntityModel<DireccionDTO> resource = EntityModel.of(direccionDTO);
+	    WebMvcLinkBuilder linkToDireccion = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarPorID(idDireccion));
+	    resource.add(linkToDireccion.withSelfRel());
+
+	    // Agregar mensajes para verificar la generación del enlace
+	    if (resource.hasLinks()) {
+	        System.out.println("Enlace generado correctamente para el cliente con ID: " + idDireccion);
+	    } else {
+	        System.out.println("Error al generar el enlace para el cliente con ID: " + idDireccion);
+	    }
+
+	    return ResponseEntity.ok(resource);
+	}
 	
 	/**
 	 * Crea una nueva dirección.
-     *
-     * @param DTO de la dirección a crear
-     * @return ResponseEntity con la dirección creada y un mensaje de éxito
-     * @throws IllegalOperationException
+	 *
+	 * @param direccionDTO El DTO de la dirección que se desea crear
+	 * @param result El resultado de la validación de entrada
+	 * @return ResponseEntity con la dirección creada y un mensaje de éxito
+	 * @throws IllegalOperationException the illegal operation exception Si ocurre un error durante la operación de creación de la dirección.
 	 */
 	@PostMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> crearDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result) throws IllegalOperationException {
@@ -97,13 +128,15 @@ public class DireccionController {
     }
 	
 	/**
-	 * Actualizar direccion.
+	 * Actualiza una direccion existente.
 	 *
-	 * @param id de la dirección
-	 * @param Información actualizada de la dirección
-	 * @return Dirección actualizada
-	 * @throws EntityNotFoundException 
-	 * @throws IllegalOperationException 
+	 * @param direccionDTO El DTO de la direccion con los nuevos datos
+	 * @param result the result
+	 * @param idDireccion El ID de la direccion que se desea actualizar.
+	 * @return ResponseEntity con la direccion actualizada y un mensaje de éxito, 
+	 * o una respuesta de error si hay errores de validacion.
+	 * @throws EntityNotFoundException Si no se encuentra la direccion con el ID proporcionado.
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de actualizacion de la direccion.
 	 */
 	@PutMapping(value = "/{idDireccion}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
@@ -115,12 +148,12 @@ public class DireccionController {
     } 
 	
 	/**
-	   * Elimina una direccion por su ID.
-     *
-     * @param  ID de la dirección a eliminar
-     * @return ResponseEntity con un mensaje de éxito
-     * @throws EntityNotFoundException 
-     * @throws IllegalOperationException 
+	 * Elimina una direccion existente.
+	 *
+	 * @param idDireccion El id de la direccion que se desea eliminar. 
+	 * @return ResponseEntity con un mensaje de exito despues de eliminar la direccion.
+	 * @throws EntityNotFoundException si no se encuentra la direccion con el id proporcionado
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de eliminacion de la direccion.
 	 */
 	@DeleteMapping(value = "/{idDireccion}",  headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> eliminarDireccion(@PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
@@ -128,7 +161,12 @@ public class DireccionController {
         ApiResponse<String> response = new ApiResponse<>(true, "Direccion eliminada con éxito", null);
         return ResponseEntity.ok(response);
     }
-	
+	/**
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
+	 *
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
+	 */
 	 private ResponseEntity<Map<String, String>> validar(BindingResult result) {
 	        Map<String, String> errores = new HashMap<>();
 	        result.getFieldErrors().forEach(err -> {

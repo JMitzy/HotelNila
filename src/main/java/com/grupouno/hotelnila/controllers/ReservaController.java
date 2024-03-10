@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,7 +27,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.grupouno.hotelnila.domain.Habitacion;
 import com.grupouno.hotelnila.domain.Reserva;
+
+import com.grupouno.hotelnila.dto.ClienteDTO;
+
+import com.grupouno.hotelnila.dto.HabitacionDTO;
 import com.grupouno.hotelnila.dto.ReservaDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -31,55 +42,79 @@ import com.grupouno.hotelnila.util.ApiResponse;
 
 import jakarta.validation.Valid;
 
+
+/**
+ * Controlador REST para gestionar operaciones relacionadas con las reservas.
+ */
 @RestController
 @RequestMapping("/api/reservas")
 public class ReservaController {
+	
 	@Autowired
     private ReservaService resService;
 
-    /** ModelMapper para mapeo de DTOs. */
     @Autowired
     private ModelMapper modelMapper;
 
 	/**
 	 * Obtiene una lista de todas las reservas.
      *
-     * @return ResponseEntity con la lista de reservas y un mensaje de éxito
+     * @return ResponseEntity con la lista de reservas y un mensaje de exito
 	 */   
-	@GetMapping(headers = "X-API-VERSION=1.0.0")
+	@GetMapping(headers="X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarReservas(){
         List<Reserva> reservas = resService.listarReservas();
         List<ReservaDTO> reservaDTOs = reservas.stream().map(reserva->modelMapper.map(reserva, ReservaDTO.class))
                 .collect(Collectors.toList());
-        ApiResponse<List<ReservaDTO>> response = new ApiResponse<>(true, "Lista de reservas obtenida con éxito", reservaDTOs);
+
+        
+     // Crear enlace al recurso de la colección de clientes
+        WebMvcLinkBuilder linkToReservas = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarReservas());
+        CollectionModel<ReservaDTO> reservaCollectionModel = CollectionModel.of(reservaDTOs);
+        reservaCollectionModel.add(linkToReservas.withSelfRel());
+
+        ApiResponse<CollectionModel<ReservaDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito",
+        		reservaCollectionModel);
         return ResponseEntity.ok(response);
-    }
-	
+	}
 	
 	/**
 	* Obtiene una reserva por su ID.
-     *
-     * @param ID de la reserva a buscar
-     * @return ResponseEntity con la reserva encontrada y un mensaje de éxito
-     * @throws EntityNotFoundException
-	 */
-	@GetMapping(value = "/{idReserva}", headers = "X-API-VERSION=1.0.0")
+	*
+	* @param idReserva El ID de la reserva que se desea obtener.
+	* @return ResponseEntity con la reserva obtenida y un mensaje de exito.
+	* @throws EntityNotFoundException Si no se encuentra la reserva con el ID proporcionado.
+	*/
+	@GetMapping(value="/{idReserva}", headers="X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idReserva) throws EntityNotFoundException {
 		Reserva reservas = resService.buscarPorIdReserva(idReserva);
 		ReservaDTO reservaDTO = modelMapper.map(reservas, ReservaDTO.class);
-        ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Reserva obtenida con éxito", reservaDTO);
-        return ResponseEntity.ok(response);
-    }
-	
+
+        
+		// Crear enlace al recurso cliente
+	    EntityModel<ReservaDTO> resource = EntityModel.of(reservaDTO);
+	    WebMvcLinkBuilder linkToReserva = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarPorID(idReserva));
+	    resource.add(linkToReserva.withSelfRel());
+
+	    // Agregar mensajes para verificar la generación del enlace
+	    if (resource.hasLinks()) {
+	        System.out.println("Enlace generado correctamente para el cliente con ID: " + idReserva);
+	    } else {
+	        System.out.println("Error al generar el enlace para el cliente con ID: " + idReserva);
+	    }
+
+	    return ResponseEntity.ok(resource);
+	}
+
 	/**
 	 * Crea una nueva reserva.
-     *
-     * @param el DTO de la reserva a crear
-     * @return ResponseEntity con la reserva creada y un mensaje de éxito
-     * @throws IllegalOperationException
+	 *
+	 * @param reservaDTO El objeto ReservaDTO que contiene los datos de la reserva a crear.
+	 * @param result     Resultado de la validación de los datos de entrada.
+	 * @return ResponseEntity con la reserva creada y un mensaje de éxito, o los errores de validación si los hay.
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de creacion de la reserva.
 	 */
-	@PostMapping(headers = "X-API-VERSION=1.0.0")
-
+	@PostMapping(headers="X-API-VERSION=1.0.0")
     public ResponseEntity<?> crearReserva(@Valid @RequestBody ReservaDTO reservaDTO, BindingResult result) throws IllegalOperationException {
 
 		if(result.hasErrors()) {
@@ -93,15 +128,17 @@ public class ReservaController {
     }
 	
 	/**
-	 * Actualizar reserva.
+	 * Actualiza una reserva existente.
 	 *
-	 * @param id de la reserva
-	 * @param  Información actualizada de la reserva
-     * @return La reserva actualizada
-     * @throws EntityNotFoundException 
-     * @throws IllegalOperationException
+	* @param reservaDTO El objeto ReservaDTO que contiene los datos actualizados de la reserva.
+	* @param result     Resultado de la validación de los datos de entrada.
+	* @param idReserva  El ID de la reserva que se desea actualizar.
+	* @return ResponseEntity con la reserva actualizada y un mensaje de exito, 
+	*  o una respuesta de error si hay errores de validacion.
+	* @throws EntityNotFoundException    Si no se encuentra la reserva con el ID proporcionado.
+	* @throws IllegalOperationException Si ocurre un error durante la operacion de actualizacion de la reserva.
 	 */
-	@PutMapping(value="/{idCliente}", headers = "X-API-VERSION=1.0.0")
+	@PutMapping(value="/{idReserva}", headers="X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarReserva(@Valid @RequestBody ReservaDTO reservaDTO,BindingResult result, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
 		if(result.hasErrors()) {
         	return validar(result);
@@ -114,23 +151,65 @@ public class ReservaController {
     } 
 	
 	/**
-	 	 * Asignar cliente a una reserva.
+	 * Asigna un cliente a una reserva existente.
 	 *
-	 * @param id  de la reserva
-	 * @param id del cliente
-	 * @return ResponseEntity con un mensaje de éxito
-	 * @throws EntityNotFoundException 
-	 * @throws IllegalOperationException 
+	 * @param idReserva El ID de la reserva a la que se desea asignar el cliente.
+	 * @param idCliente El ID del cliente que se desea asignar a la reserva.
+	 * @return ResponseEntity con la reserva actualizada y un mensaje de exito.
+	 * @throws EntityNotFoundException    Si no se encuentra la reserva o el cliente con los IDs proporcionados.
+	 * @throws IllegalOperationException Si ocurre un error durante la operación de asignación del cliente.
 	 */
 
-	@PutMapping(value="/asignarCliente/{idReserva}/{idCliente}", headers = "X-API-VERSION=1.1.0")
+	@PutMapping(value="/asignarCliente/{idReserva}/{idCliente}", headers="X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarCliente (@PathVariable Long idReserva, @PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
         Reserva reserva = resService.asignarCliente(idReserva, idCliente);
         ReservaDTO reservaDTO = modelMapper.map(reserva, ReservaDTO.class);
         ApiResponse<ReservaDTO> response = new ApiResponse<>(true, "Cliente asignado con éxito", reservaDTO);
         return ResponseEntity.ok(response);
     }
+	 
+ 	/**
+ 	 * Obtiene las habitaciones asociadas a una reserva.
+ 	 *
+ 	 * @param idReserva El ID de la reserva de la que se desean obtener las habitaciones.
+ 	 * @return ResponseEntity con la lista de habitaciones asociadas a la reserva y un mensaje de exito.
+	* @throws EntityNotFoundException    Si no se encuentra la reserva con el ID proporcionado.
+	* @throws IllegalOperationException Si ocurre un error durante la operacion de obtencion de las habitaciones.
+ 	 */
+ 	@GetMapping(value="/{idReserva}/habitaciones", headers="X-API-VERSION=1.1.0")
+	    public ResponseEntity<?> obtenerHabitaciones(@PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException  {
+	        List<Habitacion> habitaciones = resService.obtenerHabitaciones(idReserva);
+	        List<HabitacionDTO> habitacionDTO = habitaciones.stream()
+	            .map(habitacion -> modelMapper.map(habitacion, HabitacionDTO.class))
+	            .collect(Collectors.toList());
+	        ApiResponse<List<HabitacionDTO>> response = new ApiResponse<>(true, "Habitaciones obtenidas con éxito", habitacionDTO);
+	        return ResponseEntity.ok(response);
+	    }
+	 
+ 	/**
+ 	 * Obtiene una habitación por su ID en una reserva.
+ 	 *
+ 	 * @param idReserva    El ID de la reserva a la que pertenece la habitación.
+ 	 * @param idHabitacion El ID de la habitación que se desea obtener.
+ 	 * @return ResponseEntity con la habitación obtenida y un mensaje de exito.
+ 	 * @throws EntityNotFoundException    Si no se encuentra la reserva o la habitacion con los IDs proporcionados.
+ 	 * @throws IllegalOperationException Si ocurre un error durante la operacion de obtencion de la habitacion.
+ 	 */
+ 	@GetMapping(value="/{idReserva}/habitaciones/{idHabitacion}", headers="X-API-VERSION=1.1.0")
+	    public ResponseEntity<?> obtenerReservasPorId(@PathVariable Long idReserva,@PathVariable Long idHabitacion) 
+	    		throws EntityNotFoundException, IllegalOperationException {
+		 Habitacion habitacion = resService.obtenerHabitacionPorId(idReserva, idHabitacion);
+		 HabitacionDTO habitacionDTO = modelMapper.map(habitacion, HabitacionDTO.class);
+			ApiResponse< HabitacionDTO> response = new ApiResponse<>(true, "Habitacion obtenida con éxito", habitacionDTO);
+			return ResponseEntity.ok(response);
+	    }
 	
+ 	/**
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
+	 *
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
+	 */
 	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

@@ -11,6 +11,9 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import org.springframework.hateoas.RepresentationModel;
+
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +22,9 @@ import jakarta.persistence.JoinColumn;
 
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+
 import jakarta.validation.constraints.Past;
+
 import lombok.Data;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -31,8 +36,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idComprobante")
-public class Comprobante {
-	
+
+public class Comprobante extends RepresentationModel<Comprobante>{
 
 	/** Id del comprobante */
 
@@ -59,10 +64,5 @@ public class Comprobante {
 	//@JsonBackReference
 	@JoinColumn(name = "res_id")
 	private Reserva reserva;
-	
-	
-	
-
-
 
 }

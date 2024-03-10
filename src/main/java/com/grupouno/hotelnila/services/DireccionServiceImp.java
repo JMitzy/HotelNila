@@ -17,12 +17,12 @@ import com.grupouno.hotelnila.exception.IllegalOperationException;
 import com.grupouno.hotelnila.repository.DireccionRepository;
 
 /**
- * The Class DireccionServiceImp.
+ * Implementacion del servicio para operaciones relacionadas con las direcciones.
  */
 @Service
 public class DireccionServiceImp implements DireccionService {
 	
-	/** The direc rep. */
+	
 	@Autowired
 	private DireccionRepository direcRep;
 	

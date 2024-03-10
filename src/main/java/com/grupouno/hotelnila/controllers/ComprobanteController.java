@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupouno.hotelnila.domain.Comprobante;
+
 import com.grupouno.hotelnila.dto.ComprobanteDTO;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
@@ -35,57 +40,78 @@ import jakarta.validation.Valid;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class ComprobanteController.
+ * Controlador REST para gestionar operaciones relacionadas con los comprobantes.
  */
 @RestController
 @RequestMapping("/api/comprobantes")
 public class ComprobanteController {
 	
 
-	/** The comprobante service. */
 	@Autowired
 	private ComprobanteService comprobanteService;
 	
-	/** The model mapper. */
 	@Autowired
 	private ModelMapper modelMapper;
 	
 	/**
 	 * Listar comprobantes.
 	 *
-	 * @return the response entity
+	 * @return ResponseEntity con la lista de comprobantes y un mensaje de exito.
 	 */
 	@GetMapping(headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> listarComprobantes(){
         List<Comprobante> comprobantes = comprobanteService.listarComprobantes();
         List<ComprobanteDTO> comprobanteDTOs = comprobantes.stream().map(comprobante->modelMapper.map(comprobante, ComprobanteDTO.class))
                 .collect(Collectors.toList());
-        ApiResponse<List<ComprobanteDTO>> response = new ApiResponse<>(true, "Lista de comprobantes obtenida con éxito", comprobanteDTOs);
+
+        
+        // Crear enlace al recurso de la colección de clientes
+        WebMvcLinkBuilder linkToComprobantes = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarComprobantes());
+        CollectionModel<ComprobanteDTO> comprobanteCollectionModel = CollectionModel.of(comprobanteDTOs);
+        comprobanteCollectionModel.add(linkToComprobantes.withSelfRel());
+        
+        ApiResponse<CollectionModel<ComprobanteDTO>> response = new ApiResponse<>(true, "Lista de comprobantes obtenida con éxito", comprobanteCollectionModel);
         return ResponseEntity.ok(response);
     }
 	
 	/**
-	 * Listar por ID.
+	 * Obtiene un comprobante por su ID.
 	 *
-	 * @param idComprobante the id comprobante
-	 * @return the response entity
-	 * @throws EntityNotFoundException the entity not found exception
+	 * @param idComprobante El Id del comprobante que se desea obtener
+	 * @return ResponseEntity con el cliente obtenido y un mensaje de exito,
+	 *  o una respuesta de error si no se encuentra el comprobante.
+	 * @throws EntityNotFoundException Si no se encuentra el comprobante con el ID proporcionado.
 	 */
 	@GetMapping(value="/{idComprobante}", headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> listarPorID(@PathVariable Long idComprobante) throws EntityNotFoundException {
         Comprobante comprobantes = comprobanteService.buscarPorIdComprobante(idComprobante);
         ComprobanteDTO comprobanteDTO = modelMapper.map(comprobantes, ComprobanteDTO.class);
-        ApiResponse<ComprobanteDTO> response = new ApiResponse<>(true, "Comprobante obtenido con éxito", comprobanteDTO);
-        return ResponseEntity.ok(response);
-    }
+
+        
+     // Crear enlace al recurso cliente
+	    EntityModel<ComprobanteDTO> resource = EntityModel.of(comprobanteDTO);
+	    WebMvcLinkBuilder linkToCliente = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).listarPorID(idComprobante));
+	    resource.add(linkToCliente.withSelfRel());
+
+	    // Agregar mensajes para verificar la generación del enlace
+	    if (resource.hasLinks()) {
+	        System.out.println("Enlace generado correctamente para el comprobante con ID: " + idComprobante);
+	    } else {
+	        System.out.println("Error al generar el enlace para el comprobante con ID: " + idComprobante);
+	    }
+
+	    return ResponseEntity.ok(resource);
+	}
+
 	
 	/**
-	 * Crear comprobante.
+	 * Crear un nuevo comprobante.
 	 *
-	 * @param comprobanteDTO the comprobante DTO
-	 * @param result the result
-	 * @return the response entity
-	 * @throws IllegalOperationException the illegal operation exception
+	 * @param comprobanteDTO El DTO del comprobante que se desea obtener.
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con el comprobante creado y un mensaje de exito, 
+	 * o una respuesta de error si hay errores de validacion.
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de creacion del comprobante.
 	 */
 	@PostMapping(headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> crearComprobante(@Valid @RequestBody ComprobanteDTO comprobanteDTO,BindingResult result ) throws IllegalOperationException {
@@ -100,14 +126,14 @@ public class ComprobanteController {
     }
 	
 	/**
-	 * Actualizar comprobante.
+	 * Actualiza un comprobante existente.
 	 *
-	 * @param comprobanteDTO the comprobante DTO
-	 * @param result the result
-	 * @param idComprobante the id comprobante
-	 * @return the response entity
-	 * @throws EntityNotFoundException the entity not found exception
-	 * @throws IllegalOperationException the illegal operation exception
+	 * @param comprobanteDTO El DTO del comprobante con los nuevos datos
+	 * @param result  El resultado de la validación de entrada.
+	 * @param idComprobante El id del comprobante que se desea actualizar
+	 * @return ResponseEntity con el comprobante actualizado  y un mensaje de exito, o una respuesta de error si hay errores de validacion.
+	 * @throws EntityNotFoundException Si no encuentra el comprobante con el Id proporcionado.
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de actualizacion del comprobante.
 	 */
 	@PutMapping(value = "/{idComprobante}",  headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> actualizarComprobante(@Valid @RequestBody ComprobanteDTO comprobanteDTO,BindingResult result, @PathVariable Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
@@ -122,12 +148,12 @@ public class ComprobanteController {
     }
 	
 	/**
-	 * Eliminar comprobante.
+	 * Eliminar un comprobante existente.
 	 *
-	 * @param idComprobante the id comprobante
-	 * @return the response entity
-	 * @throws EntityNotFoundException the entity not found exception
-	 * @throws IllegalOperationException the illegal operation exception
+	 * @param idComprobante el id del comprobante que se desea eliminar.
+	 * @return ResponseEntity con un mensaje de exito despues de eliminar el comprobante.
+	 * @throws EntityNotFoundException Si no se encuentra el comprobante con el ID proporcionado.
+	 * @throws IllegalOperationException Si ocurre un error durante la operacion de eliminacion del comprobante.
 	 */
 	@DeleteMapping(value = "/{idComprobante}", headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> eliminarComprobante(@PathVariable Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
@@ -137,13 +163,13 @@ public class ComprobanteController {
     }
 	
 	/**
-	 * Asignar reserva.
-	 *
-	 * @param idComprobante the id comprobante
-	 * @param idReserva the id reserva
-	 * @return the response entity
-	 * @throws EntityNotFoundException the entity not found exception
-	 * @throws IllegalOperationException the illegal operation exception
+	  * Asigna una reserva a un comprobante.
+	  *
+	  * @param idComprobante El ID del comprobante al que se desea asignar la reserva.
+	  * @param idReserva     El ID de la reserva que se desea asignar al comprobante.
+	  * @return ResponseEntity con el comprobante actualizado y un mensaje de exito.
+	  * @throws EntityNotFoundException    Si no se encuentra el comprobante o la reserva con los IDs proporcionados.
+	  * @throws IllegalOperationException Si ocurre un error durante la operacion de asignacion de la reserva.
 	 */
 	@PutMapping(value = "/asignarReserva/{idComprobante}/{idReserva}",  headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarReserva (@PathVariable Long idComprobante, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
@@ -154,10 +180,10 @@ public class ComprobanteController {
     }
 	
 	/**
-	 * Validar.
+	 * Valida los errores de entrada y devuelve una respuesta de error con los detalles de los errores.
 	 *
-	 * @param result the result
-	 * @return the response entity
+	 * @param result El resultado de la validación de entrada.
+	 * @return ResponseEntity con los detalles de los errores de validación.
 	 */
 	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();

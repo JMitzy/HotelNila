@@ -11,9 +11,9 @@ import com.grupouno.hotelnila.domain.Comprobante;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
 import com.grupouno.hotelnila.exception.IllegalOperationException;
 
-// TODO: Auto-generated Javadoc
+
 /**
- * The Interface FacturaService.
+ * Interfaz que define las operaciones de servicio relacionadas con los comprobantes.
  */
 public interface ComprobanteService {
 	/**

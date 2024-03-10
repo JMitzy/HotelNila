@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.grupouno.hotelnila.domain.Cliente;
 import com.grupouno.hotelnila.domain.Recepcionista;
 import com.grupouno.hotelnila.domain.Reserva;
 import com.grupouno.hotelnila.exception.EntityNotFoundException;
@@ -24,16 +25,16 @@ import com.grupouno.hotelnila.repository.ReservaRepository;
 
 // TODO: Auto-generated Javadoc
 /**
- * La clase RecepcionistaServiceImpl implementa los métodos de la interfaz RecepcionistaService.
+ * Implementacion del servicio para operaciones relacionadas con los recepcionistas.
  */
 @Service
 public class RecepcionistaServiceImp implements RecepcionistaService {
 
-	 /** El repositorio del recepcionista. */
+	
     @Autowired
     private RecepcionistaRepository recepcionistaRep;
     
-    /** El repositorio de la reserva. */
+   
     @Autowired
     private ReservaRepository reservaRep;
 
@@ -165,6 +166,21 @@ public class RecepcionistaServiceImp implements RecepcionistaService {
 				()->new EntityNotFoundException(ErrorMessage.RECEPCIONISTA_NOT_FOUND)
 				);
 		return recepcionista.getReservas();
+	}
+
+	@Override
+	public Reserva obtenerReservaPorId(Long idRecepcionista, Long idReserva) throws EntityNotFoundException,IllegalOperationException {
+		Recepcionista recepcionista = recepcionistaRep.findById(idRecepcionista)
+				.orElseThrow(() -> new EntityNotFoundException(ErrorMessage.RECEPCIONISTA_NOT_FOUND));
+		Reserva reserva = reservaRep.findById(idReserva)
+				.orElseThrow(() -> new EntityNotFoundException(ErrorMessage.RESERVA_NOT_FOUND));
+		List<Reserva> reservasRecepcionista = recepcionista.getReservas();
+
+		if (reservasRecepcionista.contains(reserva)) {
+			return reserva;
+		} else {
+			throw new IllegalOperationException("El recepcionista no registró esta reserva");
+		}
 	}
 
 }

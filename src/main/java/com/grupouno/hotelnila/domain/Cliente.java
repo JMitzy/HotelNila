@@ -13,16 +13,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+import org.springframework.hateoas.RepresentationModel;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -34,7 +30,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idCliente")
-public class Cliente {
+
+public class Cliente extends RepresentationModel<Cliente>{
 	
 	/** Representa el identificador único para la entidad Cliente. */
 	@Id
@@ -43,7 +40,6 @@ public class Cliente {
 	
 	/** Representa el nombre del cliente. Limitado a un máximo de 30 caracteres */
 
-	
 	private String nombreCli;
 	
 	/** Representa el apellido paterno del cliente. Limitado a un máximo de 15 caracteres */
@@ -67,11 +63,6 @@ public class Cliente {
 	/**  Representa la dirección de correo electrónico del cliente */
 	
 
-	
-	
-	/**  Representa la dirección de correo electrónico del cliente */
-	
-
 	private String email;
 	
 	/** Representa la dirección del cliente.  */
@@ -84,5 +75,4 @@ public class Cliente {
 	@OneToMany (mappedBy = "cliente")
 	//@JsonManagedReference
 	private List<Reserva> reservas = new ArrayList<>();
-	
-}
+}	

@@ -53,5 +53,7 @@ public class ReservaDTO {
 	private Cliente cliente;
 	
 	/** The factura. */
-	private Comprobante factura;
+
+	private Comprobante comprobante;
+
 }

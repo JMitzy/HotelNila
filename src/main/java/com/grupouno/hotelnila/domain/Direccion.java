@@ -5,7 +5,11 @@
  */
 package com.grupouno.hotelnila.domain;
 
+
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.validation.constraints.Size;
+
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,7 +19,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+
 import jakarta.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 /**
@@ -24,7 +30,9 @@ import lombok.Data;
 @Entity
 @Data
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idDireccion")
-public class Direccion {
+
+public class Direccion extends RepresentationModel<Direccion>{
+
 	
 	/**  Representa el identificador único de la dirección */
 	@Id
@@ -47,6 +55,4 @@ public class Direccion {
 	 @OneToOne
 	 //@JsonBackReference
 	private Cliente cliente; 
-	
-
 }
