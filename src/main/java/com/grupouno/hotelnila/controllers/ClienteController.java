@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.grupouno.hotelnila.domain.Cliente;
 import com.grupouno.hotelnila.dto.ClienteDTO;
@@ -53,10 +54,14 @@ public class ClienteController {
 	 * Obtiene una lista de todos los clientes.
      *
      * @return ResponseEntity con la lista de clientes y un mensaje de éxito
+	 * @throws NoHandlerFoundException 
 	 */   
-	@GetMapping
-    public ResponseEntity<?> listarClientes(){
+    @GetMapping(headers="X-API-VERSION=1.0.0")
+    public ResponseEntity<?> listarClientes() throws NoHandlerFoundException {
         List<Cliente> clientes = clienteService.listarClientes();
+        if (clientes.isEmpty()) {
+            throw new NoHandlerFoundException("GET", "/clientes", null);
+        }
         List<ClienteDTO> clienteDTOs = clientes.stream().map(cliente->modelMapper.map(cliente, ClienteDTO.class))
                 .collect(Collectors.toList());
         ApiResponse<List<ClienteDTO>> response = new ApiResponse<>(true, "Lista de clientes obtenida con éxito", clienteDTOs);
@@ -71,7 +76,7 @@ public class ClienteController {
      * @return ResponseEntity con el cliente encontrado y un mensaje de éxito
      * @throws EntityNotFoundException
 	 */
-	@GetMapping("/{idCliente}")
+	@GetMapping(value = "/{idCliente}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idCliente) throws EntityNotFoundException {
         Cliente clientes = clienteService.buscarPorIdCliente(idCliente);
         ClienteDTO clienteDTO = modelMapper.map(clientes, ClienteDTO.class);
@@ -86,7 +91,7 @@ public class ClienteController {
      * @return ResponseEntity con el cliente creado y un mensaje de éxito
      * @throws IllegalOperationException
 	 */
-	@PostMapping
+	@PostMapping(headers = "X-API-VERSION=1")
     public ResponseEntity<?> crearCliente(@Valid @RequestBody ClienteDTO clienteDTO, BindingResult result) throws IllegalOperationException {
 		if(result.hasErrors()) {
 			return validar(result);
@@ -107,7 +112,7 @@ public class ClienteController {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException
 	 */
-	@PutMapping("/{idCliente}")
+	@PutMapping(value = "/{idCliente}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarCliente(@Valid @RequestBody ClienteDTO clienteDTO,BindingResult result, @PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
 		if(result.hasErrors()) {
         	return validar(result);
@@ -128,7 +133,7 @@ public class ClienteController {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException 
 	 */
-	@DeleteMapping("/{idCliente}")
+	@DeleteMapping(value = "/{idCliente}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> eliminarCliente(@PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
         clienteService.eliminarCliente(idCliente);
         ApiResponse<String> response = new ApiResponse<>(true, "CLiente eliminado con éxito", null);
@@ -144,7 +149,7 @@ public class ClienteController {
 	 * @throws EntityNotFoundException 
 	 * @throws IllegalOperationException 
 	 */
-	@PutMapping(value = "/asignarDireccion/{idCliente}/{idDireccion}")
+	@PutMapping(value = "/asignarDireccion/{idCliente}/{idDireccion}", headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarDireccion (@PathVariable Long idCliente, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
         Cliente cliente = clienteService.asignarDireccion(idCliente, idDireccion);
         ClienteDTO clienteDTO = modelMapper.map(cliente, ClienteDTO.class);

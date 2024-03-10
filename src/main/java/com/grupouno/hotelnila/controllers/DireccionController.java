@@ -52,7 +52,7 @@ public class DireccionController {
      *
      * @return ResponseEntity con la lista de direcciones y un mensaje de éxito
 	 */
-	@GetMapping
+	@GetMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarDirecciones(){
         List<Direccion> direcciones = direcService.listarDirecciones();
         List<DireccionDTO> direcDTOs = direcciones.stream().map(direccion->modelMapper.map(direccion, DireccionDTO.class))
@@ -69,7 +69,7 @@ public class DireccionController {
      * @return ResponseEntity con la direccion encontrada y un mensaje de éxito
      * @throws EntityNotFoundException
 	 */
-	@GetMapping("/{idDireccion}")
+	@GetMapping(value = "/{idDireccion}",  headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idDireccion) throws EntityNotFoundException {
         Direccion direcciones = direcService.buscarPorIdDireccion(idDireccion);
         DireccionDTO direccionDTO = modelMapper.map(direcciones, DireccionDTO.class);
@@ -84,7 +84,7 @@ public class DireccionController {
      * @return ResponseEntity con la dirección creada y un mensaje de éxito
      * @throws IllegalOperationException
 	 */
-	@PostMapping
+	@PostMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> crearDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result) throws IllegalOperationException {
 		if(result.hasErrors()) {
         	return validar(result);
@@ -105,7 +105,7 @@ public class DireccionController {
 	 * @throws EntityNotFoundException 
 	 * @throws IllegalOperationException 
 	 */
-	@PutMapping("/{idDireccion}")
+	@PutMapping(value = "/{idDireccion}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarDireccion(@Valid @RequestBody DireccionDTO direccionDTO,BindingResult result, @PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
 		Direccion direccion = modelMapper.map(direccionDTO, Direccion.class);
         direcService.actualizarDireccion(idDireccion,direccion);
@@ -122,7 +122,7 @@ public class DireccionController {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException 
 	 */
-	@DeleteMapping("/{idDireccion}")
+	@DeleteMapping(value = "/{idDireccion}",  headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> eliminarDireccion(@PathVariable Long idDireccion) throws EntityNotFoundException, IllegalOperationException {
 		direcService.eliminarDireccion(idDireccion);
         ApiResponse<String> response = new ApiResponse<>(true, "Direccion eliminada con éxito", null);

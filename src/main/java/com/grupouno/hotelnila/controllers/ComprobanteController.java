@@ -55,7 +55,7 @@ public class ComprobanteController {
 	 *
 	 * @return the response entity
 	 */
-	@GetMapping
+	@GetMapping(headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> listarComprobantes(){
         List<Comprobante> comprobantes = comprobanteService.listarComprobantes();
         List<ComprobanteDTO> comprobanteDTOs = comprobantes.stream().map(comprobante->modelMapper.map(comprobante, ComprobanteDTO.class))
@@ -71,7 +71,7 @@ public class ComprobanteController {
 	 * @return the response entity
 	 * @throws EntityNotFoundException the entity not found exception
 	 */
-	@GetMapping("/{idComprobante}")
+	@GetMapping(value="/{idComprobante}", headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> listarPorID(@PathVariable Long idComprobante) throws EntityNotFoundException {
         Comprobante comprobantes = comprobanteService.buscarPorIdComprobante(idComprobante);
         ComprobanteDTO comprobanteDTO = modelMapper.map(comprobantes, ComprobanteDTO.class);
@@ -87,7 +87,7 @@ public class ComprobanteController {
 	 * @return the response entity
 	 * @throws IllegalOperationException the illegal operation exception
 	 */
-	@PostMapping
+	@PostMapping(headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> crearComprobante(@Valid @RequestBody ComprobanteDTO comprobanteDTO,BindingResult result ) throws IllegalOperationException {
 		if(result.hasErrors()) {
 			return validar(result);
@@ -109,7 +109,7 @@ public class ComprobanteController {
 	 * @throws EntityNotFoundException the entity not found exception
 	 * @throws IllegalOperationException the illegal operation exception
 	 */
-	@PutMapping("/{idComprobante}")
+	@PutMapping(value = "/{idComprobante}",  headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> actualizarComprobante(@Valid @RequestBody ComprobanteDTO comprobanteDTO,BindingResult result, @PathVariable Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
 		if(result.hasErrors()) {
 			return validar(result);
@@ -129,7 +129,7 @@ public class ComprobanteController {
 	 * @throws EntityNotFoundException the entity not found exception
 	 * @throws IllegalOperationException the illegal operation exception
 	 */
-	@DeleteMapping("/{idComprobante}")
+	@DeleteMapping(value = "/{idComprobante}", headers = "X-API-VERSION=1.0.0")
 	public ResponseEntity<?> eliminarComprobante(@PathVariable Long idComprobante) throws EntityNotFoundException, IllegalOperationException {
 		comprobanteService.eliminarComprobante(idComprobante);
         ApiResponse<String> response = new ApiResponse<>(true, "Comprobante eliminada con éxito", null);
@@ -145,7 +145,7 @@ public class ComprobanteController {
 	 * @throws EntityNotFoundException the entity not found exception
 	 * @throws IllegalOperationException the illegal operation exception
 	 */
-	@PutMapping(value = "/asignarReserva/{idComprobante}/{idReserva}")
+	@PutMapping(value = "/asignarReserva/{idComprobante}/{idReserva}",  headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarReserva (@PathVariable Long idComprobante, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
         Comprobante comprobante = comprobanteService.asignarReserva(idComprobante, idReserva);
         ComprobanteDTO comprobanteDTO = modelMapper.map(comprobante, ComprobanteDTO.class);

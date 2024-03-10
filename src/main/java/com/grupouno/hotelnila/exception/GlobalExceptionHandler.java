@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.grupouno.hotelnila.util.ApiResponse;
 
@@ -70,4 +71,10 @@ public class GlobalExceptionHandler {
         ApiResponse<Map<String, String>> apiResponse = new ApiResponse<>(false, mensaje, errores);
         return ResponseEntity.badRequest().body(apiResponse);
     }*/
+    
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<?> handleNoHandlerFoundException(NoHandlerFoundException e) {
+        ApiResponse<String> response = new ApiResponse<>(false, "La versión de la API no es correcta para", null);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }

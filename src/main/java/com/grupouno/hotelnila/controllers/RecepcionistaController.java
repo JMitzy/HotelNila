@@ -64,7 +64,7 @@ public class RecepcionistaController {
      *
      * @return ResponseEntity con la lista de recepcionistas y un mensaje de éxito
      */
-    @GetMapping
+    @GetMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarRecepcionistas() {
         List<Recepcionista> recepcionistas = recepcionistaService.listarRecepcionistas();
         List<RecepcionistaDTO> recepcionistaDTOs = recepcionistas.stream().map(recepcionista -> modelMapper.map(recepcionista, RecepcionistaDTO.class))
@@ -80,7 +80,7 @@ public class RecepcionistaController {
      * @return ResponseEntity con el recepcionista encontrado y un mensaje de éxito
      * @throws EntityNotFoundException si no se encuentra la entidad
      */
-    @GetMapping("/{idRecepcionista}")
+    @GetMapping(value = "/{idRecepcionista}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idRecepcionista) throws EntityNotFoundException {
         Recepcionista recepcionista = recepcionistaService.buscarPorIdRecepcionista(idRecepcionista);
         RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
@@ -96,7 +96,7 @@ public class RecepcionistaController {
      * @return ResponseEntity con el recepcionista creado y un mensaje de éxito
      * @throws IllegalOperationException si la operación es ilegal
      */
-    @PostMapping
+    @PostMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> crearRecepcionista(@Valid @RequestBody RecepcionistaDTO recepcionistaDTO,  BindingResult result) throws IllegalOperationException {
         
     	if(result.hasErrors()) {
@@ -120,39 +120,12 @@ public class RecepcionistaController {
      * @throws IllegalOperationException si la operación es ilegal
      * @throws EntityNotFoundException si no se encuentra la entidad
      */
-    @PutMapping("/{idRecepcionista}")
+    @PutMapping(value="/{idRecepcionista}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarRecepcionista(@Valid @RequestBody RecepcionistaDTO recepcionistaDTO, BindingResult result, @PathVariable Long idRecepcionista) throws IllegalOperationException, EntityNotFoundException {
         
         if(result.hasErrors()) {
             return validar(result);
-        }
-        
-        // Validar lógica de negocio
-
-        /*if (recepcionistaDTO.getApePat() == null || recepcionistaDTO.getApePat().isEmpty()) {
-
-        if (recepcionistaDTO.getApePat() == null || recepcionistaDTO.getApePat().isEmpty()) {
-
-            return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'apePat' no puede estar vacío"));
-        }
-        
-        if (recepcionistaDTO.getApeMat() == null || recepcionistaDTO.getApeMat().isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'apeMat' no puede estar vacío"));
-        }
-        
-        if (recepcionistaDTO.getNombre() == null || recepcionistaDTO.getNombre().isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'nombre' no puede estar vacío"));
-        }
-        
-        if (recepcionistaDTO.getTelefono() == null || recepcionistaDTO.getTelefono().isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'telefono' no puede estar vacío"));
-        }
-        
-        if (!recepcionistaDTO.getTurno().equals("Mañana") && !recepcionistaDTO.getTurno().equals("Tarde")) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("mensaje", "El campo 'turno' debe ser 'Mañana' o 'Tarde'"));
-        }*/
-
-        
+        }        
         
         Recepcionista recepcionista = modelMapper.map(recepcionistaDTO, Recepcionista.class);
         recepcionistaService.actualizarRecepcionista(idRecepcionista, recepcionista);
@@ -170,7 +143,7 @@ public class RecepcionistaController {
      * @throws EntityNotFoundException si no se encuentra la entidad
      * @throws IllegalOperationException si la operación es ilegal
      */
-    @DeleteMapping("/{idRecepcionista}")
+    @DeleteMapping(value = "/{idRecepcionista}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> eliminarRecepcionista(@PathVariable Long idRecepcionista) throws EntityNotFoundException, IllegalOperationException {
         recepcionistaService.eliminarRecepcionista(idRecepcionista);
         ApiResponse<String> response = new ApiResponse<>(true, "Recepcionista eliminado con éxito", null);
@@ -186,7 +159,7 @@ public class RecepcionistaController {
      * @throws EntityNotFoundException si no se encuentra la entidad
      * @throws IllegalOperationException si la operación es ilegal
      */
-    @PutMapping("asignarReserva/{idRecepcionista}/{idReserva}")
+    @PutMapping(value = "asignarReserva/{idRecepcionista}/{idReserva}", headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarReserva(@PathVariable Long idRecepcionista, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
         Recepcionista recepcionista = recepcionistaService.asignarReserva(idRecepcionista, idReserva);
         RecepcionistaDTO recepcionistaDTO = modelMapper.map(recepcionista, RecepcionistaDTO.class);
@@ -201,7 +174,7 @@ public class RecepcionistaController {
      * @return la entidad de respuesta
      * @throws EntityNotFoundException si no se encuentra la entidad
      */
-    @GetMapping("/{idRecepcionista}/reservas")
+    @GetMapping(value="/{idRecepcionista}/reservas", headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> obtenerReservas(@PathVariable Long idRecepcionista) throws EntityNotFoundException {
         List<Reserva> reservas = recepcionistaService.obtenerReservas(idRecepcionista);
         List<ReservaDTO> reservasDTO = reservas.stream()
@@ -216,12 +189,20 @@ public class RecepcionistaController {
      *
      * @return la entidad de respuesta
      */
-    @RequestMapping(path = "/recepcionistas", method = RequestMethod.OPTIONS)
+    @RequestMapping(path = "/recepcionistas", method = RequestMethod.OPTIONS,  headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> optionsRecepcionistas() {
+    	Map<String, Boolean> methods = new HashMap<>();
+        methods.put("GET", true);
+        methods.put("POST", true);
+        methods.put("HEAD", true);
+        methods.put("OPTIONS", true);
+        methods.put("PUT", true);
+        methods.put("PATCH", false);
+        methods.put("DELETE", true);
+
         return ResponseEntity
                 .ok()
-                .allow(HttpMethod.GET, HttpMethod.POST, HttpMethod.HEAD, HttpMethod.OPTIONS, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE)
-                .build();
+                .body(methods);
     }
     
     /**

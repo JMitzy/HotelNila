@@ -46,7 +46,7 @@ public class ReservaController {
      *
      * @return ResponseEntity con la lista de reservas y un mensaje de éxito
 	 */   
-	@GetMapping
+	@GetMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarReservas(){
         List<Reserva> reservas = resService.listarReservas();
         List<ReservaDTO> reservaDTOs = reservas.stream().map(reserva->modelMapper.map(reserva, ReservaDTO.class))
@@ -63,7 +63,7 @@ public class ReservaController {
      * @return ResponseEntity con la reserva encontrada y un mensaje de éxito
      * @throws EntityNotFoundException
 	 */
-	@GetMapping("/{idReserva}")
+	@GetMapping(value = "/{idReserva}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idReserva) throws EntityNotFoundException {
 		Reserva reservas = resService.buscarPorIdReserva(idReserva);
 		ReservaDTO reservaDTO = modelMapper.map(reservas, ReservaDTO.class);
@@ -78,7 +78,7 @@ public class ReservaController {
      * @return ResponseEntity con la reserva creada y un mensaje de éxito
      * @throws IllegalOperationException
 	 */
-	@PostMapping
+	@PostMapping(headers = "X-API-VERSION=1.0.0")
 
     public ResponseEntity<?> crearReserva(@Valid @RequestBody ReservaDTO reservaDTO, BindingResult result) throws IllegalOperationException {
 
@@ -101,7 +101,7 @@ public class ReservaController {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException
 	 */
-	@PutMapping("/{idCliente}")
+	@PutMapping(value="/{idCliente}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarReserva(@Valid @RequestBody ReservaDTO reservaDTO,BindingResult result, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
 		if(result.hasErrors()) {
         	return validar(result);
@@ -123,7 +123,7 @@ public class ReservaController {
 	 * @throws IllegalOperationException 
 	 */
 
-	@PutMapping("/asignarCliente/{idReserva}/{idCliente}")
+	@PutMapping(value="/asignarCliente/{idReserva}/{idCliente}", headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarCliente (@PathVariable Long idReserva, @PathVariable Long idCliente) throws EntityNotFoundException, IllegalOperationException {
         Reserva reserva = resService.asignarCliente(idReserva, idCliente);
         ReservaDTO reservaDTO = modelMapper.map(reserva, ReservaDTO.class);

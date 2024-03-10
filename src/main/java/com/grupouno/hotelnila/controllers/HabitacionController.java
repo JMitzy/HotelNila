@@ -41,7 +41,7 @@ public class HabitacionController {
      *
      * @return ResponseEntity con la lista de habitaciones y un mensaje de éxito
 	 */   
-	@GetMapping
+	@GetMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarHabitaciones(){
         List<Habitacion> habitaciones = habiService.listarHabitaciones();
         List<HabitacionDTO> habitacionDTOs = habitaciones.stream().map(habitacion->modelMapper.map(habitacion, HabitacionDTO.class))
@@ -58,7 +58,7 @@ public class HabitacionController {
      * @return ResponseEntity con la habitación encontrada y un mensaje de éxito
      * @throws EntityNotFoundException
 	 */
-	@GetMapping("/{idHabitacion}")
+	@GetMapping(value="/{idHabitacion}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarPorID(@PathVariable Long idHabitacion) throws EntityNotFoundException {
 		Habitacion habitaciones = habiService.buscarPorIdHabitacion(idHabitacion);
 		HabitacionDTO habitacionDTO = modelMapper.map(habitaciones, HabitacionDTO.class);
@@ -73,7 +73,7 @@ public class HabitacionController {
      * @return ResponseEntity con la habitación creada y un mensaje de éxito
      * @throws IllegalOperationException
 	 */
-	@PostMapping
+	@PostMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> crearHabitacion(@RequestBody HabitacionDTO habitacionDTO, BindingResult result) throws IllegalOperationException {
 		if(result.hasErrors()) {
 			return validar(result);
@@ -94,7 +94,7 @@ public class HabitacionController {
      * @throws EntityNotFoundException 
      * @throws IllegalOperationException
 	 */
-	@PutMapping("/{idHabitacion}")
+	@PutMapping(value = "/{idHabitacion}", headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> actualizarHabitacion(@Valid @RequestBody HabitacionDTO habitacionDTO, BindingResult result, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
 		if(result.hasErrors()) {
         	return validar(result);
@@ -104,7 +104,8 @@ public class HabitacionController {
         HabitacionDTO updatedHabitacionDTO = modelMapper.map(habitacion, HabitacionDTO.class);
         ApiResponse<HabitacionDTO> response = new ApiResponse<>(true, "Habitación actualizada con con éxito",updatedHabitacionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    } 
+    }
+	
 	private ResponseEntity<Map<String, String>> validar(BindingResult result) {
         Map<String, String> errores = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

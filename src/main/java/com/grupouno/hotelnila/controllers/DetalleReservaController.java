@@ -53,7 +53,7 @@ public class DetalleReservaController {
      *
      * @return the response entity
      */
-    @GetMapping
+    @GetMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> listarDetallesReservas(){
         List<DetalleReserva> detalleReservas = detResService.listarDetallesReservas();
         List<DetalleReservaDTO> detalleReservasDTOs = detalleReservas.stream().map(detallereservas->modelMapper.map(detallereservas, DetalleReservaDTO.class))
@@ -69,7 +69,7 @@ public class DetalleReservaController {
      * @return the response entity
      * @throws EntityNotFoundException the entity not found exception
      */
-    @GetMapping("/{idDetalleReserva}")
+    @GetMapping(value = "/{idDetalleReserva}",  headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> buscarPorIdDetalleReserva(@PathVariable Long idReservaHabitacion) throws EntityNotFoundException {
         DetalleReserva detalleReservas = detResService.buscarPorIdDetalleReserva(idReservaHabitacion);
         DetalleReservaDTO detalleReservasDTO = modelMapper.map(detalleReservas, DetalleReservaDTO.class);
@@ -85,7 +85,7 @@ public class DetalleReservaController {
      * @return the response entity
      * @throws IllegalOperationException the illegal operation exception
      */
-    @PostMapping
+    @PostMapping(headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?> crearDetalleReserva (@Valid @RequestBody DetalleReservaDTO detalleReservaDTO, BindingResult result) throws IllegalOperationException {
     	if(result.hasErrors()) {
 			return validar(result);
@@ -107,7 +107,7 @@ public class DetalleReservaController {
      * @throws EntityNotFoundException the entity not found exception
      * @throws IllegalOperationException the illegal operation exception
      */
-    @PutMapping("/{idReservaHabitacion}")
+    @PutMapping(value = "/{idReservaHabitacion}",  headers = "X-API-VERSION=1.0.0")
     public ResponseEntity<?>  actualizarDetalleReserva(@Valid @RequestBody DetalleReservaDTO detalleReservaDTO,BindingResult result,@PathVariable Long idReservaHabitacion) throws EntityNotFoundException, IllegalOperationException {
     	if(result.hasErrors()) {
         	return validar(result);
@@ -128,7 +128,7 @@ public class DetalleReservaController {
      * @throws EntityNotFoundException the entity not found exception
      * @throws IllegalOperationException the illegal operation exception
      */
-    @PutMapping(value = "/reserva/{idReservaHabitacion}/{idReserva}")
+    @PutMapping(value = "/reserva/{idReservaHabitacion}/{idReserva}",  headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarReserva(@PathVariable Long idReservaHabitacion, @PathVariable Long idReserva) throws EntityNotFoundException, IllegalOperationException {
         DetalleReserva detalleReserva = detResService.asignarReserva(idReservaHabitacion, idReserva);
         DetalleReservaDTO detalleReservaDTO = modelMapper.map(detalleReserva,DetalleReservaDTO.class);
@@ -145,7 +145,7 @@ public class DetalleReservaController {
      * @throws EntityNotFoundException the entity not found exception
      * @throws IllegalOperationException the illegal operation exception
      */
-    @PutMapping(value = "/habitacion/{idReservaHabitacion}/{idHabitacion}")
+    @PutMapping(value = "/habitacion/{idReservaHabitacion}/{idHabitacion}",  headers = "X-API-VERSION=1.1.0")
     public ResponseEntity<?> asignarHabitacion(@PathVariable Long idReservaHabitacion, @PathVariable Long idHabitacion) throws EntityNotFoundException, IllegalOperationException {
         DetalleReserva detalleReserva = detResService.asignarHabitacion(idReservaHabitacion, idHabitacion);
         DetalleReservaDTO detalleReservaDTO = modelMapper.map(detalleReserva,DetalleReservaDTO.class);
